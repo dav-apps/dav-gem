@@ -1,5 +1,6 @@
 module Dav
    API_URL = "https://rails-backend-dav2070.c9users.io/v1/";
+   #API_URL = "http://dav-backend.westeurope.cloudapp.azure.com/v1/";
 
    class Auth
       attr_accessor :api_key, :secret_key, :uuid, :dev_user_id, :dev_id
@@ -15,13 +16,13 @@ module Dav
       def login(email, password)
          # Send login request
          login_url = API_URL + 'users/login?email=' + email + '&password=' + password
-         json = send_http_request(login_url, create_auth_token(self), "GET")
+         json = send_http_request(login_url, "GET", {"Authorization" => create_auth_token(self)}, nil)
          jwt = json["jwt"]
          user_id = json["user_id"]
          
          # Get the user details with the user id and create new User object
          get_user_url = API_URL + 'users/' + user_id.to_s
-         user = User.new(send_http_request(get_user_url, jwt, "GET"))
+         user = User.new(send_http_request(get_user_url, "GET", {"Authorization" => jwt}, nil))
          user.jwt = jwt
          user.id = user_id
          user
@@ -56,7 +57,7 @@ def create_auth_token(auth)
             auth.secret_key, auth.dev_id.to_s + "," + auth.dev_user_id.to_s + "," + auth.uuid.to_s))
 end
 
-def send_http_request(url, auth_header, http_method)
+def send_http_request(url, http_method, headers, body)
    require 'net/http'
    require 'json'
    
@@ -66,17 +67,23 @@ def send_http_request(url, auth_header, http_method)
    case http_method
    when "POST"
       req = Net::HTTP::Post.new(uri)
+      req.body = body.to_json
    when "PUT"
       req = Net::HTTP::Put.new(uri)
+      req.body = body.to_json
    when "DELETE"
       req = Net::HTTP::Delete.new(uri)
    else
       req = Net::HTTP::Get.new(uri)
    end
    
-   if auth_header
-      req['Authorization'] = auth_header
+   headers.each do |header, value|
+      req[header] = value
    end
+   
+   #if auth_header
+   #   req['Authorization'] = auth_header
+   #end
    http.use_ssl = (uri.scheme == "https")
    response = JSON.parse http.request(req).body
 end
