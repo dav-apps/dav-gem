@@ -1,7 +1,7 @@
-
 lib = File.expand_path("../lib", __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require "dav/version"
+require "dav/authentication"
 
 Gem::Specification.new do |spec|
   spec.name          = "dav"
@@ -9,9 +9,9 @@ Gem::Specification.new do |spec|
   spec.authors       = ["dav"]
   spec.email         = ["dav2070@web.de"]
 
-  spec.summary       = %q{TODO: Write a short summary, because RubyGems requires one.}
-  spec.description   = %q{TODO: Write a longer description or delete this line.}
-  spec.homepage      = "TODO: Put your gem's website or public repo URL here."
+  spec.summary       = %q{This gem makes using the API easier.}
+  #spec.description   = %q{TODO: Write a longer description or delete this line.}
+  spec.homepage      = "https://github.com/Dav2070/dav-gem"
   spec.license       = "MIT"
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'

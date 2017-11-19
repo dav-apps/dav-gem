@@ -1,5 +1,6 @@
 require "dav/version"
+require "dav/authentication"
 
 module Dav
-  # Your code goes here...
+   
 end
