@@ -45,6 +45,12 @@ module Dav
          @new_email = attributes["new_email"]
          @avatar_file_extension = attributes["avatar_file_extension"]
       end
+      
+      def self.get(jwt, user_id)
+         url = Dav::API_URL + 'users/' + user_id.to_s
+         json = send_http_request(url, "GET", {"Authorization" => jwt}, nil)
+         user = User.new(json)
+      end
    end
 end
 
