@@ -37,6 +37,7 @@ module Dav
       attr_accessor :email, :username, :confirmed, :email_confirmation_token, :password_confirmation_token, :new_email, :avatar_file_extension, :jwt, :id
       
       def initialize(attributes)
+         @id = attributes["id"]
          @email = attributes["email"]
          @username = attributes["username"]
          @confirmed = attributes["confirmed"]
