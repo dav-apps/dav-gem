@@ -5,12 +5,12 @@ module Dav
    class Auth
       attr_accessor :api_key, :secret_key, :uuid, :dev_user_id, :dev_id
       
-      def initialize(attributes)
-         @api_key = attributes["api_key"]
-         @secret_key = attributes["secret_key"]
-         @uuid = attributes["uuid"]
-         @dev_user_id = attributes["dev_user_id"]
-         @dev_id = attributes["dev_id"]
+      def initialize(api_key: "", secret_key: "", uuid: "", dev_user_id: nil, dev_id: nil)
+         @api_key = api_key
+         @secret_key = secret_key
+         @uuid = uuid
+         @dev_user_id = dev_user_id
+         @dev_id = dev_id
       end
       
       def login(email, password)
@@ -81,9 +81,6 @@ def send_http_request(url, http_method, headers, body)
       req[header] = value
    end
    
-   #if auth_header
-   #   req['Authorization'] = auth_header
-   #end
    http.use_ssl = (uri.scheme == "https")
    response = JSON.parse http.request(req).body
 end
