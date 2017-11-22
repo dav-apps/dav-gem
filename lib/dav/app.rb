@@ -9,9 +9,9 @@ module Dav
          @published = attributes["published"]
       end
       
-      def self.create(user, name, desc)
+      def self.create(jwt, name, desc)
          url = Dav::API_URL + 'apps/app?name=' + name + '&desc=' + desc
-         result = send_http_request(url, "POST", {"Authorization" => user.jwt}, nil)
+         result = send_http_request(url, "POST", {"Authorization" => jwt}, nil)
          if result["code"] == 201
             app = App.new(JSON.parse result["body"])
          else
@@ -21,9 +21,9 @@ module Dav
          end
       end
       
-      def self.get(user, id)
+      def self.get(jwt, id)
          url = Dav::API_URL + 'apps/app/' + id.to_s
-         result = send_http_request(url, "GET", {"Authorization" => user.jwt}, nil)
+         result = send_http_request(url, "GET", {"Authorization" => jwt}, nil)
          if result["code"] == 200
             app = App.new(JSON.parse result["body"])
          else
