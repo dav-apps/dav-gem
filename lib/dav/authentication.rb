@@ -16,16 +16,29 @@ module Dav
       def login(email, password)
          # Send login request
          login_url = API_URL + 'users/login?email=' + email + '&password=' + password
-         json = send_http_request(login_url, "GET", {"Authorization" => create_auth_token(self)}, nil)
-         jwt = json["jwt"]
-         user_id = json["user_id"]
-         
-         # Get the user details with the user id and create new User object
-         get_user_url = API_URL + 'users/' + user_id.to_s
-         user = User.new(send_http_request(get_user_url, "GET", {"Authorization" => jwt}, nil))
-         user.jwt = jwt
-         user.id = user_id
-         user
+         login_result = send_http_request(login_url, "GET", {"Authorization" => create_auth_token(self)}, nil)
+         if login_result["code"] == 200
+            jwt = JSON.parse(login_result["body"])["jwt"]
+            user_id = JSON.parse(login_result["body"])["user_id"]
+            
+            # Get the user details with the user id and create new User object
+            get_user_url = API_URL + 'users/' + user_id.to_s
+            get_result = send_http_request(get_user_url, "GET", {"Authorization" => jwt}, nil)
+            if get_result["code"] == 200
+               user = User.new(JSON.parse get_result["body"])
+               user.jwt = jwt
+               user.id = user_id
+               user
+            else
+               puts "There was an error: "
+               puts get_result["code"]
+               puts get_result["body"]
+            end
+         else
+            puts "There was an error: "
+            puts login_result["code"]
+            puts login_result["body"]
+         end
       end
       
       def signup
@@ -49,8 +62,14 @@ module Dav
       
       def self.get(jwt, user_id)
          url = Dav::API_URL + 'users/' + user_id.to_s
-         json = send_http_request(url, "GET", {"Authorization" => jwt}, nil)
-         user = User.new(json)
+         result = send_http_request(url, "GET", {"Authorization" => jwt}, nil)
+         if result["code"] == 200
+            user = User.new(JSON.parse result["body"])
+         else
+            puts "There was an error: "
+            puts result["code"]
+            puts result["body"]
+         end
       end
    end
 end
@@ -89,5 +108,10 @@ def send_http_request(url, http_method, headers, body)
    end
    
    http.use_ssl = (uri.scheme == "https")
-   response = JSON.parse http.request(req).body
+   
+   response = http.request(req)
+   result = Hash.new
+   result["body"] = response.body
+   result["code"] = response.code.to_i
+   return result
 end

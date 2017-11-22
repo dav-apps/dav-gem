@@ -6,25 +6,43 @@ module Dav
          @id = attributes["id"]
          @name = attributes["name"]
          @description = attributes["description"]
-         @published = attributes["description"]
+         @published = attributes["published"]
       end
       
       def self.create(user, name, desc)
-         create_app_url = Dav::API_URL + 'apps/app?name=' + name + '&desc=' + desc
-         json = send_http_request(create_app_url, "POST", {"Authorization" => user.jwt}, nil)
-         app = App.new(json)
+         url = Dav::API_URL + 'apps/app?name=' + name + '&desc=' + desc
+         result = send_http_request(url, "POST", {"Authorization" => user.jwt}, nil)
+         if result["code"] == 201
+            app = App.new(JSON.parse result["body"])
+         else
+            puts "There was an error: "
+            puts result["code"]
+            puts result["body"]
+         end
       end
       
       def self.get(user, id)
-         get_app_url = Dav::API_URL + 'apps/app/' + id.to_s
-         json = send_http_request(get_app_url, "GET", {"Authorization" => user.jwt}, nil)
-         app = App.new(json)
+         url = Dav::API_URL + 'apps/app/' + id.to_s
+         result = send_http_request(url, "GET", {"Authorization" => user.jwt}, nil)
+         if result["code"] == 200
+            app = App.new(JSON.parse result["body"])
+         else
+            puts "There was an error: "
+            puts result["code"]
+            puts result["body"]
+         end
       end
       
       def log_event(auth, name)
-         create_event_url = Dav::API_URL + 'analytics/event?name=' + name + '&app_id=' + @id.to_s
-         json = send_http_request(create_event_url, "POST", {"Authorization" => create_auth_token(auth)}, nil)
-         event = Event.new(json)
+         url = Dav::API_URL + 'analytics/event?name=' + name + '&app_id=' + @id.to_s
+         result = send_http_request(url, "POST", {"Authorization" => create_auth_token(auth)}, nil)
+         if result["code"] == 200
+            event = Event.new(JSON.parse result["body"])
+         else
+            puts "There was an error: "
+            puts result["code"]
+            puts result["body"]
+         end
       end
    end
 end
