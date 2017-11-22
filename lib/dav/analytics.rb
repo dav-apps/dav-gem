@@ -12,10 +12,5 @@ module Dav
          json = send_http_request(create_event_url, "POST", {"Authorization" => create_auth_token(auth)}, nil)
          event = Event.new(json)
       end
-      
-      #def self.get(auth, name)
-      #   get_event_url = Dav::API_URL + 'analytics/event?name=' + name
-      #   json = send_http_request(get_event_url, create_auth_token(auth), "GET")
-      #end
    end
 end
