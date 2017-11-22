@@ -19,5 +19,16 @@ module Dav
          json = send_http_request(url, "GET", {"Authorization" => user.jwt}, nil)
          Table.new(json)
       end
+      
+      def update(jwt, table_name)
+         url = Dav::API_URL + "apps/table/" + @id.to_s + "?table_name=" + table_name
+         json = send_http_request(url, "PUT", {"Authorization" => jwt}, nil)
+         @name = table_name
+      end
+      
+      def delete(jwt)
+         url = Dav::API_URL + "apps/table/" + @id.to_s
+         json = send_http_request(url, "DELETE", {"Authorization" => jwt}, nil)
+      end
    end
 end
