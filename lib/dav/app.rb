@@ -3,10 +3,10 @@ module Dav
       attr_accessor :name, :description, :published, :id
       
       def initialize(attributes)
+         @id = attributes["id"]
          @name = attributes["name"]
          @description = attributes["description"]
          @published = attributes["description"]
-         @id = attributes["id"]
       end
       
       def self.create(user, name, desc)
