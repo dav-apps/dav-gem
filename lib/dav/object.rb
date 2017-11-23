@@ -23,7 +23,7 @@ module Dav
       end
       
       def self.get(jwt, object_id)
-         url = Dav::API_URL + "apps/object/" + object_id.to_s
+         url = Dav::API_URL + "apps/object/#{object_id.to_s}"
          result = send_http_request(url, "GET", {"Authorization" => jwt}, nil)
          if result["code"] == 200
             Object.new(JSON.parse(result["body"]))
@@ -31,6 +31,31 @@ module Dav
             puts "There was an error: "
             puts result["code"]
             puts result["body"]
+         end
+      end
+      
+      def update(jwt, properties)
+         url = Dav::API_URL + "apps/object/#{@id}"
+         result = send_http_request(url, "PUT", {"Authorization" => jwt}, properties)
+         if result["code"] == 200
+            # Update local object
+            @properties = properties
+         else
+            puts "There was an error: "
+            puts result["code"]
+            puts result["body"]
+         end
+      end
+      
+      def delete(jwt)
+         url = Dav::API_URL + "apps/object/#{@id}"
+         result = send_http_request(url, "DELETE", {"Authorization" => jwt}, nil)
+         if result["code"] == 200
+            JSON.parse(result["body"])
+         else
+            puts "There was an error: "
+            puts get_result["code"]
+            puts get_result["body"]
          end
       end
    end
