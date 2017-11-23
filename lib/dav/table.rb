@@ -14,9 +14,7 @@ module Dav
          if result["code"] == 201
             Table.new(JSON.parse result["body"])
          else
-            puts "There was an error: "
-            puts result["code"]
-            puts result["body"]
+            raise_error(JSON.parse result["body"])
          end
       end
       
@@ -26,9 +24,7 @@ module Dav
          if result["code"] == 200
             Table.new(JSON.parse result["body"])
          else
-            puts "There was an error: "
-            puts result["code"]
-            puts result["body"]
+            raise_error(JSON.parse result["body"])
          end
       end
       
@@ -39,9 +35,7 @@ module Dav
             # Update local objects
             @name = table_name
          else
-            puts "There was an error: "
-            puts result["code"]
-            puts result["body"]
+            raise_error(JSON.parse result["body"])
          end
       end
       
@@ -51,9 +45,7 @@ module Dav
          if result["code"] == 200
             result["body"]
          else
-            puts "There was an error: "
-            puts result["code"]
-            puts result["body"]
+            raise_error(JSON.parse result["body"])
          end
       end
    end

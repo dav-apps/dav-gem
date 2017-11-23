@@ -15,9 +15,7 @@ module Dav
          if result["code"] == 201
             app = App.new(JSON.parse result["body"])
          else
-            puts "There was an error: "
-            puts result["code"]
-            puts result["body"]
+            raise_error(JSON.parse result["body"])
          end
       end
       
@@ -27,9 +25,7 @@ module Dav
          if result["code"] == 200
             app = App.new(JSON.parse result["body"])
          else
-            puts "There was an error: "
-            puts result["code"]
-            puts result["body"]
+            raise_error(JSON.parse result["body"])
          end
       end
       
@@ -39,9 +35,7 @@ module Dav
          if result["code"] == 200
             event = Event.new(JSON.parse result["body"])
          else
-            puts "There was an error: "
-            puts result["code"]
-            puts result["body"]
+            raise_error(JSON.parse result["body"])
          end
       end
    end

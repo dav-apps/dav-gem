@@ -30,14 +30,10 @@ module Dav
                user.id = user_id
                user
             else
-               puts "There was an error: "
-               puts get_result["code"]
-               puts get_result["body"]
+               raise_error(JSON.parse get_result["body"])
             end
          else
-            puts "There was an error: "
-            puts login_result["code"]
-            puts login_result["body"]
+            raise_error(JSON.parse login_result["body"])
          end
       end
       
@@ -75,6 +71,19 @@ module Dav
 end
 
 
+def raise_error(json)
+   error_message = ""
+   i = 0
+   json.values[0].each do |key, value|
+      if i != 0
+         error_message += ", "
+      end
+      error_message += "#{value.to_s} (#{key.to_s})"
+   end
+   
+   raise StandardError, error_message
+end
+
 def create_auth_token(auth)
    require 'base64'
    require 'openssl'
@@ -103,8 +112,10 @@ def send_http_request(url, http_method, headers, body)
       req = Net::HTTP::Get.new(uri)
    end
    
-   headers.each do |header, value|
-      req[header] = value
+   if headers != nil
+      headers.each do |header, value|
+         req[header] = value
+      end
    end
    
    http.use_ssl = (uri.scheme == "https")
