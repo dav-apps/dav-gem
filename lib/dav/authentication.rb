@@ -37,34 +37,66 @@ module Dav
          end
       end
       
-      def signup
-         
+      def signup(email, password, username)
+         url = API_URL + "users/signup?email=#{email}&password=#{password}&username=#{username}"
+         result = send_http_request(url, "POST", {"Authorization" => create_auth_token(self)}, nil)
+         if result["code"] == 201
+            JSON.parse result["body"]
+         else
+            raise_error(JSON.parse(result["body"]))
+         end
       end
    end
    
    class User
-      attr_accessor :email, :username, :confirmed, :email_confirmation_token, :password_confirmation_token, :new_email, :avatar_file_extension, :jwt, :id
+      attr_accessor :email, :username, :confirmed, :new_email, :old_email, :avatar_file_extension, :jwt, :id
       
       def initialize(attributes)
          @id = attributes["id"]
          @email = attributes["email"]
          @username = attributes["username"]
          @confirmed = attributes["confirmed"]
-         @email_confirmation_token = attributes["email_confirmation_token"]
-         @password_confirmation_token = attributes["password_confirmation_token"]
          @new_email = attributes["new_email"]
+         @old_email = attributes["old_email"]
          @avatar_file_extension = attributes["avatar_file_extension"]
       end
       
       def self.get(jwt, user_id)
-         url = Dav::API_URL + 'users/' + user_id.to_s
+         url = Dav::API_URL + "users/#{user_id.to_s}"
          result = send_http_request(url, "GET", {"Authorization" => jwt}, nil)
          if result["code"] == 200
             user = User.new(JSON.parse result["body"])
          else
-            puts "There was an error: "
-            puts result["code"]
-            puts result["body"]
+            raise_error(JSON.parse result["body"])
+         end
+      end
+      
+      def update(properties)
+         url = Dav::API_URL + "users"
+         result = send_http_request(url, "PUT", {"Authorization" => @jwt, "Content-Type" => "application/json"}, properties)
+         if result["code"] == 200
+            @email = JSON.parse(result["body"])["email"]
+            @username = JSON.parse(result["body"])["username"]
+            @confirmed = JSON.parse(result["body"])["confirmed"]
+            @new_email = JSON.parse(result["body"])["new_email"]
+            @old_email = JSON.parse(result["body"])["old_email"]
+            @avatar_file_extension = JSON.parse(result["body"])["avatar_file_extension"]
+         else
+            raise_error(JSON.parse result["body"])
+         end
+      end
+      
+      def confirm
+         
+      end
+      
+      def delete
+         url = Dav::API_URL + "users"
+         result = send_http_request(url, "DELETE", {"Authorization" => @jwt}, nil)
+         if result["code"] == 200
+            JSON.parse(result["body"])
+         else
+            raise_error(JSON.parse result["body"])
          end
       end
    end
