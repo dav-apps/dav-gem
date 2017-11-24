@@ -15,7 +15,7 @@ module Dav
       
       def login(email, password)
          # Send login request
-         login_url = API_URL + 'users/login?email=' + email + '&password=' + password
+         login_url = API_URL + "users/login?email=#{email}&password=#{password}"
          login_result = send_http_request(login_url, "GET", {"Authorization" => create_auth_token(self)}, nil)
          if login_result["code"] == 200
             jwt = JSON.parse(login_result["body"])["jwt"]
@@ -83,6 +83,56 @@ module Dav
             @avatar_file_extension = JSON.parse(result["body"])["avatar_file_extension"]
          else
             raise_error(JSON.parse result["body"])
+         end
+      end
+      
+      def self.send_verification_email(email)
+         url = Dav::API_URL + "users/send_verification_email?email=#{email}"
+         result = send_http_request(url, "POST", nil, nil)
+         if result["code"] == 200
+            JSON.parse(result["body"])
+         else
+            raise_error(JSON.parse(result["body"]))
+         end
+      end
+      
+      def self.send_password_reset_email(email)
+         url = Dav::API_URL + "users/send_password_reset_email?email=#{}"
+         result = send_http_request(url, "POST", nil, nil)
+         if result["code"] == 200
+            JSON.parse(result["body"])
+         else
+            raise_error(JSON.parse(result["body"]))
+         end
+      end
+      
+      def self.save_new_password(id, password_confirmation_token)
+         url = Dav::API_URL + "users/#{id}/save_new_password/#{password_confirmation_token}"
+         result = send_http_request(url , "POST", nil, nil)
+         if result["code"] == 200
+            JSON.parse(result["body"])
+         else
+            raise_error(JSON.parse(result["body"]))
+         end
+      end
+      
+      def self.save_new_email(id, email_confirmation_token)
+         url = Dav::API_URL + "users/#{id}/save_new_email/#{email_confirmation_token}"
+         result = send_http_request(url, "POST", nil, nil)
+         if result["code"] == 200
+            JSON.parse(result["body"])
+         else
+            raise_error(JSON.parse(result["body"]))
+         end
+      end
+      
+      def self.reset_new_email(id)
+         url = Dav::API_URL + "users/#{id}/reset_new_email"
+         result = send_http_request(url, "POST", nil, nil)
+         if result["code"] == 200
+            JSON.parse(result["body"])
+         else
+            raise_error(JSON.parse(result["body"]))
          end
       end
       
