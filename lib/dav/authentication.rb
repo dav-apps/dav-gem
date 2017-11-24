@@ -86,8 +86,14 @@ module Dav
          end
       end
       
-      def confirm
-         
+      def self.confirm(id, email_confirmation_token)
+         url = Dav::API_URL + "users/#{id}/confirm?email_confirmation_token=#{email_confirmation_token}"
+         result = send_http_request(url, "POST", {"Authorization" => @jwt}, nil)
+         if result["code"] == 200
+            @confirmed = true
+         else
+            raise_error(JSON.parse(result["body"]))
+         end
       end
       
       def delete
