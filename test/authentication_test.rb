@@ -7,6 +7,8 @@ class AuthenticationTest < Minitest::Test
       @testuser_email = "test@example.com"
       @testuser_password = "password"
       @testuser_username = "testuser"
+      
+      @testapp_id = 1
     
       @auth = Dav::Auth.new(:api_key => "T_i8UphbI4V1R8UCNGt8qsbqdkk", :secret_key => "j60BkpIgf0Qe2IwbMHh3_IqLxXYtGcFyaU8TR4KDsrdopUKZwjbOkw", :uuid => "e6799b1c-e87a-4d9d-8238-8bd4b84b25fe", :dev_user_id => "1", :dev_id => "1")
       @user = @auth.login(@testuser_email, @testuser_password)

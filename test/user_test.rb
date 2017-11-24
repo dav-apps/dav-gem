@@ -7,6 +7,8 @@ class DavTest < Minitest::Test
       @testuser_email = "test@example.com"
       @testuser_password = "password"
       @testuser_username = "testuser"
+      
+      @testapp_id = 1
     
       @auth = Dav::Auth.new(:api_key => "T_i8UphbI4V1R8UCNGt8qsbqdkk", :secret_key => "j60BkpIgf0Qe2IwbMHh3_IqLxXYtGcFyaU8TR4KDsrdopUKZwjbOkw", :uuid => "e6799b1c-e87a-4d9d-8238-8bd4b84b25fe", :dev_user_id => "1", :dev_id => "1")
       @user = @auth.login(@testuser_email, @testuser_password)
@@ -69,12 +71,30 @@ class DavTest < Minitest::Test
       end
    end
    
+   def test_cant_update_user_with_too_long_username
+      begin
+         @user.update({"username": "2"*50})
+         assert false
+      rescue StandardError => e
+         assert e.message.include? "2301"
+      end
+   end
+   
    def test_cant_update_user_with_too_short_password
       begin
          @user.update({"password": "1234"})
          assert false
       rescue StandardError => e
          assert e.message.include? "2202"
+      end
+   end
+   
+   def test_cant_update_user_with_too_long_password
+      begin
+         @user.update({"password": "1234"*30})
+         assert false
+      rescue StandardError => e
+         assert e.message.include? "2302"
       end
    end
    # End update tests
