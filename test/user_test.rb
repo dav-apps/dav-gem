@@ -1,6 +1,6 @@
 require "test_helper"
 
-class DavTest < Minitest::Test
+class UserTest < Minitest::Test
    
    def before_setup
       super

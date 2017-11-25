@@ -1,6 +1,6 @@
 require "test_helper"
 
-class DavTest < Minitest::Test
+class AnalyticsTest < Minitest::Test
    
    def before_setup
       super
@@ -30,7 +30,7 @@ class DavTest < Minitest::Test
          Dav::Event.log(@auth, @testapp_id, "a")
          assert false
       rescue StandardError => e
-         assert e.message.include? "2208"
+         assert e.message.include? "2203"
       end
    end
    
@@ -39,7 +39,7 @@ class DavTest < Minitest::Test
          Dav::Event.log(@auth, @testapp_id, "a"*50)
          assert false
       rescue StandardError => e
-         assert e.message.include? "2308"
+         assert e.message.include? "2303"
       end
    end
    

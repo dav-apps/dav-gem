@@ -32,7 +32,7 @@ module Dav
       
       def update(jwt, properties)
          url = Dav::API_URL + "apps/object/#{@id}"
-         result = send_http_request(url, "PUT", {"Authorization" => jwt}, properties)
+         result = send_http_request(url, "PUT", {"Authorization" => jwt, "Content-Type" => "application/json"}, properties)
          if result["code"] == 200
             # Update local object
             @properties = properties

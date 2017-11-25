@@ -15,7 +15,7 @@ class AuthenticationTest < Minitest::Test
    end
    
    def after_teardown
-    
+      
       super
    end
    
