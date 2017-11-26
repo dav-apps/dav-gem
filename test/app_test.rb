@@ -95,7 +95,7 @@ class AppTest < Minitest::Test
    # End get tests
    
    # Log event tests
-      def test_can_log_event
+   def test_can_log_event
       testapp = Dav::App.get(@user.jwt, @testapp_id)
       testapp.log_event(@auth, "TestEvent")
    end

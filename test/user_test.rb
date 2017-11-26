@@ -20,7 +20,6 @@ class UserTest < Minitest::Test
    end
    
    # get tests
-   
    def test_can_get_own_user
       user = Dav::User.get(@user.jwt, @user.id)
       assert_equal(user.username, @user.username)
@@ -37,10 +36,13 @@ class UserTest < Minitest::Test
       end
    end
    
+   def test_can_get_apps_of_user
+      user = Dav::User.get(@user.jwt, @user.id)
+      assert_same(2, user.apps[0])
+   end
    # End get tests
    
    # Update tests
-   
    def test_can_update_the_user
       new_email = "newtest@example.com"
       @user.update({"email": new_email})

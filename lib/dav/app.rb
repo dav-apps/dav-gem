@@ -1,13 +1,12 @@
 module Dav
    class App
-      attr_accessor :name, :description, :published, :id, :apps
+      attr_accessor :name, :description, :published, :id
       
       def initialize(attributes)
          @id = attributes["id"]
          @name = attributes["name"]
          @description = attributes["description"]
          @published = attributes["published"]
-         @apps = attributes["apps"]
       end
       
       def self.create(jwt, name, desc)
