@@ -8,7 +8,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ["dav"]
   spec.email         = ["dav2070@web.de"]
 
-  spec.summary       = %q{This gem makes using the API easier.}
+  spec.summary       = %q{This gem makes using the dav API easier.}
   #spec.description   = %q{TODO: Write a longer description or delete this line.}
   spec.homepage      = "https://github.com/Dav2070/dav-gem"
   spec.license       = "MIT"

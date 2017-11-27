@@ -1,6 +1,6 @@
 module Dav
-   API_URL = "https://rails-backend-dav2070.c9users.io/v1/";
-   #API_URL = "https://dav-backend.westeurope.cloudapp.azure.com/v1/";
+   #API_URL = "https://rails-backend-dav2070.c9users.io/v1/";
+   API_URL = "https://dav-backend.westeurope.cloudapp.azure.com/v1/";
 
    class Auth
       attr_accessor :api_key, :secret_key, :uuid
