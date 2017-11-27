@@ -108,5 +108,15 @@ module Dav
             raise_error(JSON.parse result["body"])
          end
       end
+      
+      def create_dev
+         url = API_URL + "devs"
+         result = send_http_request(url, "POST", {"Authorization" => @jwt}, nil)
+         if result["code"] == 201
+            Dav::Dev.new(JSON.parse(result["body"]))
+         else
+            raise_error(JSON.parse(result["body"]))
+         end
+      end
    end
 end

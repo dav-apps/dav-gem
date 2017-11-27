@@ -120,4 +120,13 @@ class UserTest < Minitest::Test
       end
    end
    # End update tests
+   
+   #create_dev tests
+   def test_can_create_dev_from_user
+      dev = @testuser.create_dev
+      assert !dev.id.nil?
+      
+      dev.delete(@testuser.jwt)
+   end
+   # End create_dev tests
 end
