@@ -1,6 +1,6 @@
 require "test_helper"
 
-class AnalyticsTest < Minitest::Test
+class DevTest < Minitest::Test
    
    def before_setup
       super
@@ -39,29 +39,15 @@ class AnalyticsTest < Minitest::Test
       super
    end
    
-   # Log tests
-   
-   def test_can_log
-      Dav::Event.log(@auth, @testdevapp_id, "TestLog")
+   # create tests
+   def test_can_create_get_and_delete_dev
+      testdev = Dav::Dev.create(@testuser.jwt)
+      assert_same(@testuser_id, testdev.user_id)
+      
+      dev = Dav::Dev.get(@testuser.jwt)
+      assert_same(testdev.id, dev.id)
+      
+      dev.delete(@testuser.jwt)
    end
-   
-   def test_cant_log_with_too_short_name
-      begin
-         Dav::Event.log(@auth, @testdevapp_id, "a")
-         assert false
-      rescue StandardError => e
-         assert e.message.include? "2203"
-      end
-   end
-   
-   def test_cant_log_with_too_long_name
-      begin
-         Dav::Event.log(@auth, @testdevapp_id, "a"*50)
-         assert false
-      rescue StandardError => e
-         assert e.message.include? "2303"
-      end
-   end
-   
-   # End log tests
+   # End create tests
 end

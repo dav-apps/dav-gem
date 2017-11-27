@@ -1,6 +1,6 @@
 require "test_helper"
 
-class AnalyticsTest < Minitest::Test
+class AuthenticationTest < Minitest::Test
    
    def before_setup
       super
@@ -39,29 +39,44 @@ class AnalyticsTest < Minitest::Test
       super
    end
    
-   # Log tests
-   
-   def test_can_log
-      Dav::Event.log(@auth, @testdevapp_id, "TestLog")
+   # Login tests
+   def test_can_login_user
+      user = @auth.login(@testuser_email, @testuser_password)
+      assert_equal(user.email, @testuser_email)
+      assert_equal(user.username, @testuser_username)
+      assert_same(user.id, @testuser_id)
    end
    
-   def test_cant_log_with_too_short_name
+   def test_trying_logging_in_user_with_incorrect_password_throws_exception
       begin
-         Dav::Event.log(@auth, @testdevapp_id, "a")
+         user = @auth.login(@testuser_email, "wrongpassword")
          assert false
       rescue StandardError => e
-         assert e.message.include? "2203"
+         assert e.message.include? "1201"
       end
    end
    
-   def test_cant_log_with_too_long_name
+   # End login tests
+   
+   # Signup tests
+   
+   def test_cant_signup_user_with_taken_email
       begin
-         Dav::Event.log(@auth, @testdevapp_id, "a"*50)
+         user = @auth.signup(@testuser_email, "password", "testtest")
          assert false
       rescue StandardError => e
-         assert e.message.include? "2303"
+         assert e.message.include? "2702"
       end
    end
    
-   # End log tests
+   def test_cant_signup_user_with_taken_username
+      begin
+         user = @auth.signup("test123@example.com", "password", @testuser_username)
+         assert false
+      rescue StandardError => e
+         assert e.message.include? "2701"
+      end
+   end
+   
+   # End signup tests
 end

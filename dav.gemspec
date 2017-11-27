@@ -1,7 +1,6 @@
 lib = File.expand_path("../lib", __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require "dav/version"
-require "dav/authentication"
 
 Gem::Specification.new do |spec|
   spec.name          = "dav"

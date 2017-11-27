@@ -3,14 +3,12 @@ module Dav
    #API_URL = "https://dav-backend.westeurope.cloudapp.azure.com/v1/";
 
    class Auth
-      attr_accessor :api_key, :secret_key, :uuid, :dev_user_id, :dev_id
+      attr_accessor :api_key, :secret_key, :uuid
       
-      def initialize(api_key: "", secret_key: "", uuid: "", dev_user_id: nil, dev_id: nil)
+      def initialize(api_key: "", secret_key: "", uuid: "")
          @api_key = api_key
          @secret_key = secret_key
          @uuid = uuid
-         @dev_user_id = dev_user_id
-         @dev_id = dev_id
       end
       
       def login(email, password)
@@ -68,7 +66,7 @@ def create_auth_token(auth)
    require 'openssl'
    
    auth.api_key + "," + Base64.strict_encode64(OpenSSL::HMAC.hexdigest(OpenSSL::Digest.new('sha256'), 
-            auth.secret_key, auth.dev_id.to_s + "," + auth.dev_user_id.to_s + "," + auth.uuid.to_s))
+            auth.secret_key, auth.uuid.to_s))
 end
 
 def send_http_request(url, http_method, headers, body)
