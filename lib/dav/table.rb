@@ -1,6 +1,6 @@
 module Dav
    class Table
-      attr_accessor :id, :app_id, :name
+      attr_reader :id, :app_id, :name
       
       def initialize(attributes)
          @id = attributes["id"]
@@ -10,7 +10,7 @@ module Dav
       end
       
       def self.create(jwt, table_name, app_id)
-         url = Dav::API_URL + "apps/table?table_name=#{table_name}&app_id=#{app_id}"
+         url = $api_url + "apps/table?table_name=#{table_name}&app_id=#{app_id}"
          result = send_http_request(url, "POST", {"Authorization" => jwt}, nil)
          if result["code"] == 201
             Table.new(JSON.parse result["body"])
@@ -20,7 +20,7 @@ module Dav
       end
       
       def self.get(jwt, app_id, table_name)
-         url = Dav::API_URL + "apps/table?app_id=#{app_id}&table_name=#{table_name}"
+         url = $api_url + "apps/table?app_id=#{app_id}&table_name=#{table_name}"
          result = send_http_request(url, "GET", {"Authorization" => jwt}, nil)
          if result["code"] == 200
             Table.new(JSON.parse result["body"])
@@ -30,7 +30,7 @@ module Dav
       end
       
       def update(jwt, properties)
-         url = Dav::API_URL + "apps/table/#{@id}"
+         url = $api_url + "apps/table/#{@id}"
          result = send_http_request(url, "PUT", {"Authorization" => jwt, "Content-Type" => "application/json"}, properties)
          if result["code"] == 200
             # Update local objects
@@ -42,7 +42,7 @@ module Dav
       end
       
       def delete(jwt)
-         url = Dav::API_URL + "apps/table/#{@id}"
+         url = $api_url + "apps/table/#{@id}"
          result = send_http_request(url, "DELETE", {"Authorization" => jwt}, nil)
          if result["code"] == 200
             result["body"]

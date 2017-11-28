@@ -1,6 +1,6 @@
 module Dav
    class Event
-      attr_accessor :name, :id
+      attr_reader :name, :id
       
       def initialize(attributes)
          @name = attributes["name"]
@@ -8,7 +8,7 @@ module Dav
       end
       
       def self.log(auth, app_id, name)
-         url = Dav::API_URL + 'analytics/event?name=' + name + '&app_id=' + app_id.to_s
+         url = $api_url + 'analytics/event?name=' + name + '&app_id=' + app_id.to_s
          result = send_http_request(url, "POST", {"Authorization" => create_auth_token(auth)}, nil)
          if result["code"] == 201
             event = Event.new(JSON.parse(result["body"]))

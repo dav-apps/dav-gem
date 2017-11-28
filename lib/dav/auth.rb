@@ -1,26 +1,31 @@
 module Dav
-   #API_URL = "https://rails-backend-dav2070.c9users.io/v1/";
-   API_URL = "https://dav-backend.westeurope.cloudapp.azure.com/v1/";
-
+   $api_url = "https://rails-backend-dav2070.c9users.io/v1/"
+   
    class Auth
-      attr_accessor :api_key, :secret_key, :uuid
+      attr_reader :api_key, :secret_key, :uuid
       
-      def initialize(api_key: "", secret_key: "", uuid: "")
+      def initialize(api_key: "", secret_key: "", uuid: "", environment: "development")
          @api_key = api_key
          @secret_key = secret_key
          @uuid = uuid
+         
+         if environment == "production"
+            $api_url = "https://dav-backend.westeurope.cloudapp.azure.com/v1/"
+         else
+            $api_url = "https://rails-backend-dav2070.c9users.io/v1/"
+         end
       end
       
       def login(email, password)
          # Send login request
-         login_url = API_URL + "users/login?email=#{email}&password=#{password}"
+         login_url = $api_url + "users/login?email=#{email}&password=#{password}"
          login_result = send_http_request(login_url, "GET", {"Authorization" => create_auth_token(self)}, nil)
          if login_result["code"] == 200
             jwt = JSON.parse(login_result["body"])["jwt"]
             user_id = JSON.parse(login_result["body"])["user_id"]
             
             # Get the user details with the user id and create new User object
-            get_user_url = API_URL + 'users/' + user_id.to_s
+            get_user_url = $api_url + 'users/' + user_id.to_s
             get_result = send_http_request(get_user_url, "GET", {"Authorization" => jwt}, nil)
             if get_result["code"] == 200
                user = Dav::User.new(JSON.parse get_result["body"])
@@ -36,7 +41,7 @@ module Dav
       end
       
       def signup(email, password, username)
-         url = API_URL + "users/signup?email=#{email}&password=#{password}&username=#{username}"
+         url = $api_url + "users/signup?email=#{email}&password=#{password}&username=#{username}"
          result = send_http_request(url, "POST", {"Authorization" => create_auth_token(self)}, nil)
          if result["code"] == 201
             JSON.parse result["body"]

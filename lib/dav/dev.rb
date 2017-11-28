@@ -11,7 +11,7 @@ module Dav
       end
       
       def self.create(jwt)
-         url = API_URL + "devs"
+         url = $api_url + "devs"
          result = send_http_request(url, "POST", {"Authorization" => jwt}, nil)
          if result["code"] == 201
             Dev.new(JSON.parse(result["body"]))
@@ -21,7 +21,7 @@ module Dav
       end
       
       def self.get(jwt)
-         url = API_URL + "devs"
+         url = $api_url + "devs"
          result = send_http_request(url, "GET", {"Authorization" => jwt}, nil)
          if result["code"] == 200
             Dev.new(JSON.parse(result["body"]))
@@ -31,7 +31,7 @@ module Dav
       end
       
       def delete(jwt)
-         url = API_URL + "devs"
+         url = $api_url + "devs"
          result = send_http_request(url, "DELETE", {"Authorization" => jwt}, nil)
          if result["code"] == 200
             JSON.parse(result["body"])
@@ -41,7 +41,7 @@ module Dav
       end
       
       def generate_new_keys(jwt)
-         url = API_URL + "devs"
+         url = $api_url + "devs"
          result = send_http_request(url, "POST", {"Authorization" => jwt}, nil)
          if result["code"] == 200
             @api_key = JSON.parse(result["body"])["api_key"]
