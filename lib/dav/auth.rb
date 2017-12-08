@@ -70,8 +70,8 @@ def create_auth_token(auth)
    require 'base64'
    require 'openssl'
    
-   auth.api_key + "," + Base64.strict_encode64(OpenSSL::HMAC.hexdigest(OpenSSL::Digest.new('sha256'), 
-            auth.secret_key, auth.uuid.to_s))
+   auth.api_key + "," + Base64.strict_encode64(Base64.strict_encode64(OpenSSL::HMAC.digest(OpenSSL::Digest.new('sha256'), 
+            auth.secret_key, auth.uuid.to_s)))
 end
 
 def send_http_request(url, http_method, headers, body)

@@ -63,7 +63,7 @@ class AppTest < Minitest::Test
    
    def test_cant_create_app_with_too_long_name
       begin
-         Dav::App.create(@testdevuser.jwt, "n"*30, "Hello World!")
+         Dav::App.create(@testdevuser.jwt, "n"*55, "Hello World!")
          assert false
       rescue StandardError => e
          assert e.message.include? "2303"
@@ -81,7 +81,7 @@ class AppTest < Minitest::Test
    
    def test_cant_create_app_with_too_long_description
       begin
-         Dav::App.create(@testdevuser.jwt, "TestApp12131", "hello"*50)
+         Dav::App.create(@testdevuser.jwt, "TestApp12131", "h"*510)
          assert false
       rescue StandardError => e
          assert e.message.include? "2304"
