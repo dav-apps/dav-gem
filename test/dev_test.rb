@@ -50,4 +50,11 @@ class DevTest < Minitest::Test
       dev.delete(@testuser.jwt)
    end
    # End create tests
+   
+   # get_by_api_key tests
+   def test_can_get_dev_by_api_key
+      dev = Dav::Dev.get_by_api_key(@auth, @testdev_api_key)
+      assert_equal(@testdev_secret_key, dev.secret_key)
+   end
+   # End get_by_api_key tests
 end

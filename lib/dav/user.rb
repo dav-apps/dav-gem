@@ -110,7 +110,7 @@ module Dav
       end
       
       def create_dev
-         url = $api_url + "devs"
+         url = $api_url + "devs/dev"
          result = send_http_request(url, "POST", {"Authorization" => @jwt}, nil)
          if result["code"] == 201
             Dav::Dev.new(JSON.parse(result["body"]))
