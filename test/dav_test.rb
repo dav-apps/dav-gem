@@ -15,7 +15,7 @@ class DavTest < Minitest::Test
    $dav_dev["uuid"] = "d133e303-9dbb-47db-9531-008b20e5aae8"
 
    $testuser_user = Hash.new
-   $testuser_user["id"] = 1
+   $testuser_user["id"] = 2
    $testuser_user["email"] = "test@example.com"
    $testuser_user["password"] = "password"
    $testuser_user["username"] = "testuser"
@@ -33,6 +33,13 @@ class DavTest < Minitest::Test
    $nutzer["password"] = "blablablablabla"
    $nutzer["username"] = "nutzer"
    $nutzer["confirmed"] = false
+   
+   $normalo = Hash.new
+   $normalo["id"] = 4
+   $normalo["email"] = "normalo@helloworld.net"
+   $normalo["password"] = "schoeneheilewelt"
+   $normalo["username"] = "normalo"
+   $normalo["confirmed"] = true
    
    $cards = Hash.new
    $cards["dev_id"] = 1
@@ -74,4 +81,10 @@ class DavTest < Minitest::Test
    
    $testuserXdav = $dav_dev_auth.login($testuser_user["email"], 
                                        $testuser_user["password"])
+                                       
+   $normaloXdav = $dav_dev_auth.login($normalo["email"],
+                                       $normalo["password"])
+   
+   $normaloXtestuser = $testuser_dev_auth.login($normalo["email"],
+                                                $normalo["password"])
 end
