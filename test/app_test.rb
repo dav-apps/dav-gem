@@ -1,44 +1,6 @@
 require "test_helper"
 
 class AppTest < Minitest::Test
-   
-   def before_setup
-      super
-      @dev_api_key = "-AFBbtM8968dnAyPWpv4BK2B1zDtt70YwNmGzVWs"
-      @dev_secret_key = "11JTmdRyItz4N3rgsZhpLBrTQXRhmHcBw3Zi_aBq3rROawKPH8yaRg"
-      @dev_uuid = "fd02c38f-50ec-4a0c-a9af-c9c841ade0e6"
-      
-      @testuser_id = 2
-      @testuser_email = "test@example.com"
-      @testuser_password = "password"
-      @testuser_username = "testuser"
-      
-      @testdev_id = 3
-      @testdev_email = "testdev@example.com"
-      @testdev_password = "password"
-      @testdev_username = "testdev"
-      
-      @testdev_api_key = "gHgHKRbIjdguCM4cv5481hdiF5hZGWZ4x12Ur-7v"
-      @testdev_secret_key = "ucvak5gYUdjDbQU-j0q6uXN9y5HBrqFGtjpf_NrVstw4Wdhd5VFvQg"
-      @testdev_uuid = "614c2e23-8ffa-4858-be59-621da2ec5c57"
-      
-      @testdevapp_id = 1
-      @testdevapp_name = "TestApp"
-      @testdevtable_name = "TestTable"
-      @cards_id = 3
-      @cards_app_name = "Cards"
-      @cards_table_name = "Card"
-      
-      @auth = Dav::Auth.new(:api_key => @dev_api_key, :secret_key => @dev_secret_key, :uuid => @dev_uuid)
-      @testuser = @auth.login(@testuser_email, @testuser_password)
-      @testdevuser = @auth.login(@testdev_email, @testdev_password)
-   end
-   
-   def after_teardown
-      
-      super
-   end
-   
    # create tests
    def test_can_create_update_get_and_delete_app
       testapp_name = "TestApp121131"
@@ -46,24 +8,24 @@ class AppTest < Minitest::Test
       testapp_new_name = "NewTestApp131"
       testapp_new_desc = "New test app description"
       
-      testapp = Dav::App.create(@testdevuser.jwt, testapp_name, testapp_desc)
+      testapp = Dav::App.create($testuserXdav.jwt, testapp_name, testapp_desc)
       assert_equal(testapp_name, testapp.name)
       assert_equal(testapp_desc, testapp.description)
       
-      testapp.update(@testdevuser.jwt, {"name" => testapp_new_name, "description" => testapp_new_desc})
+      testapp.update($testuserXdav.jwt, {"name" => testapp_new_name, "description" => testapp_new_desc})
       assert_equal(testapp_new_name, testapp.name)
       assert_equal(testapp_new_desc, testapp.description)
       
-      app = Dav::App.get(@testdevuser.jwt, testapp.id)
+      app = Dav::App.get($testuserXdav.jwt, testapp.id)
       assert_equal(testapp_new_name, app.name)
       assert_equal(testapp_new_desc, app.description)
       
-      testapp.delete(@testdevuser.jwt)
+      testapp.delete($testuserXdav.jwt)
    end
    
    def test_cant_create_app_with_too_long_name
       begin
-         Dav::App.create(@testdevuser.jwt, "n"*55, "Hello World!")
+         Dav::App.create($testuserXdav.jwt, "n"*55, "Hello World!")
          assert false
       rescue StandardError => e
          assert e.message.include? "2303"
@@ -72,7 +34,7 @@ class AppTest < Minitest::Test
    
    def test_cant_create_app_with_too_short_name
       begin
-         Dav::App.create(@testdevuser.jwt, "n", "Hello World!")
+         Dav::App.create($testuserXdav.jwt, "n", "Hello World!")
          assert false
       rescue StandardError => e
          assert e.message.include? "2203"
@@ -81,7 +43,7 @@ class AppTest < Minitest::Test
    
    def test_cant_create_app_with_too_long_description
       begin
-         Dav::App.create(@testdevuser.jwt, "TestApp12131", "h"*510)
+         Dav::App.create($testuserXdav.jwt, "TestApp12131", "h"*510)
          assert false
       rescue StandardError => e
          assert e.message.include? "2304"
@@ -90,7 +52,7 @@ class AppTest < Minitest::Test
    
    def test_cant_create_app_with_too_short_description
       begin
-         Dav::App.create(@testdevuser.jwt, "TestApp12131", "H")
+         Dav::App.create($testuserXdav.jwt, "TestApp12131", "H")
          assert false
       rescue StandardError => e
          assert e.message.include? "2204"
@@ -100,13 +62,17 @@ class AppTest < Minitest::Test
    
    # Get tests
    def test_can_get_app
-      testapp = Dav::App.get(@testdevuser.jwt, @testdevapp_id)
-      assert_same(@testdevapp_id, testapp.id)
+      begin
+         testapp = Dav::App.get($testuserXdav.jwt, $testapp["id"])
+         assert true
+      rescue StandardError => e
+         assert false
+      end
    end
    
    def test_cant_get_app_that_user_does_not_own
       begin
-         testapp = Dav::App.get(@testdevuser.jwt, 3)
+         testapp = Dav::App.get($testuserXdav.jwt, $cards["id"])
          assert false
       rescue StandardError => e
          assert e.message.include? "1102"
@@ -116,8 +82,8 @@ class AppTest < Minitest::Test
    
    # Log event tests
    def test_can_log_event
-      testapp = Dav::App.get(@testdevuser.jwt, @testdevapp_id)
-      testapp.log_event(@auth, "TestEvent")
+      testapp = Dav::App.get($testuserXdav.jwt, $testapp["id"])
+      testapp.log_event($testuser_dev_auth, "TestEvent")
    end
    # End log event tests
 end
