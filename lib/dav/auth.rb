@@ -11,6 +11,8 @@ module Dav
          
          if environment == "production"
             $api_url = "https://dav-backend.westeurope.cloudapp.azure.com/v1/"
+         elsif environment == "development2"
+            $api_url = "http://localhost:3111/"
          else
             $api_url = "https://rails-backend-dav2070.c9users.io/v1/"
          end
