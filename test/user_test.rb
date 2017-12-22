@@ -19,8 +19,12 @@ class UserTest < Minitest::Test
    end
    
    def test_can_get_apps_of_user
+      obj = Dav::Object.create($testuserXdav.jwt, $card["name"], $cards["id"], {test: "test"})
+
       user = Dav::User.get($testuserXdav.jwt, $testuser_user["id"])
-      assert(user.apps[0])
+      if assert(user.apps[0])
+         obj.delete($testuserXdav.jwt);
+      end
    end
    # End get tests
    
