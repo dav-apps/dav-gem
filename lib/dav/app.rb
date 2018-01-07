@@ -33,7 +33,13 @@ module Dav
          url = $api_url + "apps/apps/all"
          result = send_http_request(url, "GET", {"Authorization" => jwt}, nil)
          if(result["code"] == 200)
-            apps_array = (JSON.parse(result["body"]).to_a)[0][1].to_a
+            apps_json = (JSON.parse(result["body"]).to_a)[0][1].to_a
+            apps_array = Array.new
+
+            apps_json.each do |app|
+               apps_array.push(App.new(app))
+            end
+            apps_array
          else
             raise_error(JSON.parse result["body"])
          end
