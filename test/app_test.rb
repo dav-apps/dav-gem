@@ -79,6 +79,26 @@ class AppTest < Minitest::Test
       end
    end
    # End get tests
+
+   # get_all_apps tests
+   def test_can_get_all_apps
+      begin
+         all_apps = Dav::App.get_all_apps($davXdav.jwt)
+         assert true
+      rescue StandardError => e
+         assert false
+      end
+   end
+
+   def test_cant_get_all_apps_from_outside_the_website
+      begin
+         all_apps = Dav::App.get_all_apps($davXtestuser.jwt)
+         assert false
+      rescue StandardError => e
+         assert e.message.include? "1102"
+      end
+   end
+   # End get_all_apps tests
    
    # Log event tests
    def test_can_log_event
