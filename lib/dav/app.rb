@@ -28,6 +28,16 @@ module Dav
             raise_error(JSON.parse result["body"])
          end
       end
+
+      def self.get_all_apps(jwt)
+         url = $api_url + "apps/apps/all"
+         result = send_http_request(url, "GET", {"Authorization" => jwt}, nil)
+         if(result["code"] == 200)
+            apps_array = (JSON.parse(result["body"]).to_a)[0][1].to_a
+         else
+            raise_error(JSON.parse result["body"])
+         end
+      end
       
       def update(jwt, properties)
          url = $api_url + "apps/app/#{@id}"
