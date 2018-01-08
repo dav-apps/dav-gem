@@ -10,7 +10,7 @@ module Dav
          @new_email = attributes["new_email"]
          @old_email = attributes["old_email"]
          @avatar_file_extension = attributes["avatar_file_extension"]
-         @apps = attributes["apps"]
+         @apps = convert_json_to_apps_array(attributes["apps"])
       end
       
       def self.get(jwt, user_id)

@@ -107,3 +107,11 @@ def send_http_request(url, http_method, headers, body)
    result["code"] = response.code.to_i
    return result
 end
+
+def convert_json_to_apps_array(json)
+   apps_array = Array.new
+   json.each do |app|
+      apps_array.push(Dav::App.new(app))
+   end
+   apps_array
+end
