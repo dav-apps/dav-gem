@@ -1,12 +1,15 @@
 module Dav
    class App
-      attr_reader :name, :description, :published, :id
+      attr_reader :name, :description, :published, :id, :link_web, :link_play, :link_windows
       
       def initialize(attributes)
          @id = attributes["id"]
          @name = attributes["name"]
          @description = attributes["description"]
          @published = attributes["published"]
+         @link_web = attributes["link_web"]
+         @link_play = attributes["link_play"]
+         @link_windows = attributes["link_windows"]
       end
       
       def self.create(jwt, name, desc)
@@ -44,8 +47,12 @@ module Dav
          url = $api_url + "apps/app/#{@id}"
          result = send_http_request(url, "PUT", {"Authorization" => jwt, "Content-Type" => "application/json"}, properties)
          if result["code"] == 200
-            @name = JSON.parse(result["body"])["name"]
-            @description = JSON.parse(result["body"])["description"]
+            body = JSON.parse(result["body"])
+            @name = body["name"]
+            @description = body["description"]
+            @link_web = body["link_web"]
+            @link_play = body["link_play"]
+            @link_windows = body["link_windows"]
          else
             raise_error(JSON.parse result["body"])
          end
