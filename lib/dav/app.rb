@@ -29,9 +29,9 @@ module Dav
          end
       end
 
-      def self.get_all_apps(jwt)
+      def self.get_all_apps(auth)
          url = $api_url + "apps/apps/all"
-         result = send_http_request(url, "GET", {"Authorization" => jwt}, nil)
+         result = send_http_request(url, "GET", {"Authorization" => create_auth_token(auth)}, nil)
          if(result["code"] == 200)
             apps_json = (JSON.parse(result["body"]).to_a)[0][1].to_a
             apps_array = convert_json_to_apps_array(apps_json)

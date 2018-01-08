@@ -83,7 +83,7 @@ class AppTest < Minitest::Test
    # get_all_apps tests
    def test_can_get_all_apps
       begin
-         all_apps = Dav::App.get_all_apps($davXdav.jwt)
+         all_apps = Dav::App.get_all_apps($dav_dev_auth)
          assert true
       rescue StandardError => e
          assert false
@@ -92,7 +92,7 @@ class AppTest < Minitest::Test
 
    def test_cant_get_all_apps_from_outside_the_website
       begin
-         all_apps = Dav::App.get_all_apps($davXtestuser.jwt)
+         all_apps = Dav::App.get_all_apps($testuser_dev_auth)
          assert false
       rescue StandardError => e
          assert e.message.include? "1102"
