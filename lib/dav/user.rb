@@ -49,8 +49,18 @@ module Dav
          end
       end
       
-      def self.send_password_reset_email(email)
-         url = $api_url + "users/send_password_reset_email?email=#{}"
+      def self.send_reset_password_email(email)
+         url = $api_url + "users/send_reset_password_email?email=#{email}"
+         result = send_http_request(url, "POST", nil, nil)
+         if result["code"] == 200
+            JSON.parse(result["body"])
+         else
+            raise_error(JSON.parse(result["body"]))
+         end
+      end
+
+      def self.set_password(password_confirmation_token, password)
+         url = $api_url + "users/set_password/#{password_confirmation_token}?password=#{password}"
          result = send_http_request(url, "POST", nil, nil)
          if result["code"] == 200
             JSON.parse(result["body"])
