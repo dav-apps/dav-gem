@@ -1,6 +1,6 @@
 module Dav
    class User
-      attr_accessor :email, :username, :confirmed, :new_email, :old_email, :avatar_file_extension, :jwt, :id, :apps
+      attr_accessor :email, :username, :confirmed, :new_email, :old_email, :avatar_file_extension, :jwt, :id, :apps, :plan
       
       def initialize(attributes)
          @id = attributes["id"]
@@ -11,6 +11,7 @@ module Dav
          @old_email = attributes["old_email"]
          @avatar_file_extension = attributes["avatar_file_extension"]
          @apps = convert_json_to_apps_array(attributes["apps"])
+         @plan = attributes["plan"]
       end
       
       def self.get(jwt, user_id)
