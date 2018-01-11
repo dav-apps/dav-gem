@@ -18,6 +18,8 @@ module Dav
          result = send_http_request(url, "GET", {"Authorization" => jwt}, nil)
          if result["code"] == 200
             user = User.new(JSON.parse result["body"])
+            user.jwt = jwt
+            user
          else
             raise_error(JSON.parse result["body"])
          end
