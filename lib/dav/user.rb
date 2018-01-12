@@ -121,6 +121,16 @@ module Dav
             raise_error(JSON.parse result["body"])
          end
       end
+
+      def remove_app(app_id)
+         url = $api_url + "users/app/#{app_id}"
+         result = send_http_request(url, "DELETE", {"Authorization" => @jwt}, nil)
+         if result["code"] == 200
+            JSON.parse(result["body"])
+         else
+            raise_error(JSON.parse result["body"])
+         end
+      end
       
       def create_dev
          url = $api_url + "devs/dev"
