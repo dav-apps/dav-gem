@@ -112,9 +112,19 @@ module Dav
          end
       end
       
-      def delete
-         url = $api_url + "users"
-         result = send_http_request(url, "DELETE", {"Authorization" => @jwt}, nil)
+      def self.delete(user_id, email_confirmation_token, password_confirmation_token)
+         url = $api_url + "users/#{user_id}?email_confirmation_token=#{email_confirmation_token}&password_confirmation_token=#{password_confirmation_token}"
+         result = send_http_request(url, "DELETE", nil, nil)
+         if result["code"] == 200
+            JSON.parse(result["body"])
+         else
+            raise_error(JSON.parse result["body"])
+         end
+      end
+
+      def self.send_delete_account_email(email)
+         url = $api_url + "users/send_delete_account_email?email=#{email}"
+         result = send_http_request(url, "POST", nil, nil)
          if result["code"] == 200
             JSON.parse(result["body"])
          else
