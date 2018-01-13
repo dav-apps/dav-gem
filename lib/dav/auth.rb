@@ -40,8 +40,8 @@ module Dav
          end
       end
 
-      def login_by_jwt(jwt)
-         login_url = $api_url + "users/login_by_jwt?api_key=#{@api_key}"
+      def self.login_by_jwt(jwt, api_key)
+         login_url = $api_url + "users/login_by_jwt?api_key=#{api_key}"
          login_result = send_http_request(login_url, "GET", {"Authorization" => jwt}, nil)
          if login_result["code"] == 200
             jwt = JSON.parse(login_result["body"])["jwt"]
