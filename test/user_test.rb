@@ -37,11 +37,13 @@ class UserTest < Minitest::Test
       $normaloXdav.update({"email": $normalo["email"]})
       assert_equal($normaloXdav.new_email, $normalo["email"])
       
-      $normaloXdav.update({"avatar_file_extension": ".jpg"})
-      assert_equal(".jpg", $normaloXdav.avatar_file_extension)
+      new_username = "testusername"
+      old_username = $normalo["username"]
+      $normaloXdav.update({"username": new_username})
+      assert_equal(new_username, $normaloXdav.username)
       
-      $normaloXdav.update({"avatar_file_extension": ".png"})
-      assert_equal(".png", $normaloXdav.avatar_file_extension)
+      $normaloXdav.update({"username": old_username})
+      assert_equal(old_username, $normaloXdav.username)
    end
    
    def test_cant_update_user_with_invalid_email

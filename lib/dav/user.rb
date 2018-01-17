@@ -1,6 +1,6 @@
 module Dav
    class User
-      attr_accessor :email, :username, :confirmed, :new_email, :old_email, :avatar_file_extension, :jwt, :id, :apps, :plan
+      attr_accessor :email, :username, :confirmed, :new_email, :old_email, :jwt, :id, :apps, :plan
       
       def initialize(attributes)
          @id = attributes["id"]
@@ -9,7 +9,6 @@ module Dav
          @confirmed = attributes["confirmed"]
          @new_email = attributes["new_email"]
          @old_email = attributes["old_email"]
-         @avatar_file_extension = attributes["avatar_file_extension"]
          @apps = convert_json_to_apps_array(attributes["apps"])
          @plan = attributes["plan"]
       end
@@ -35,7 +34,6 @@ module Dav
             @confirmed = JSON.parse(result["body"])["confirmed"]
             @new_email = JSON.parse(result["body"])["new_email"]
             @old_email = JSON.parse(result["body"])["old_email"]
-            @avatar_file_extension = JSON.parse(result["body"])["avatar_file_extension"]
             @apps = JSON.parse(result["body"])["apps"]
          else
             raise_error(JSON.parse result["body"])
