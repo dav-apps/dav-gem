@@ -1,6 +1,6 @@
 module Dav
    class User
-      attr_accessor :email, :username, :confirmed, :new_email, :old_email, :jwt, :id, :apps, :plan
+      attr_accessor :email, :username, :confirmed, :new_email, :old_email, :jwt, :id, :apps, :plan, :avatar
       
       def initialize(attributes)
          @id = attributes["id"]
@@ -11,10 +11,23 @@ module Dav
          @old_email = attributes["old_email"]
          @apps = convert_json_to_apps_array(attributes["apps"])
          @plan = attributes["plan"]
+         @avatar = attributes["avatar"]
       end
       
       def self.get(jwt, user_id)
-         url = $api_url + "users/#{user_id.to_s}"
+         url = $api_url + "auth/user/#{user_id.to_s}"
+         result = send_http_request(url, "GET", {"Authorization" => jwt}, nil)
+         if result["code"] == 200
+            user = User.new(JSON.parse result["body"])
+            user.jwt = jwt
+            user
+         else
+            raise_error(JSON.parse result["body"])
+         end
+      end
+
+      def self.get_by_jwt(jwt)
+         url = $api_url + "auth/user"
          result = send_http_request(url, "GET", {"Authorization" => jwt}, nil)
          if result["code"] == 200
             user = User.new(JSON.parse result["body"])
@@ -26,7 +39,7 @@ module Dav
       end
       
       def update(properties)
-         url = $api_url + "users"
+         url = $api_url + "auth/user"
          result = send_http_request(url, "PUT", {"Authorization" => @jwt, "Content-Type" => "application/json"}, properties)
          if result["code"] == 200
             @email = JSON.parse(result["body"])["email"]
@@ -41,7 +54,7 @@ module Dav
       end
       
       def self.send_verification_email(email)
-         url = $api_url + "users/send_verification_email?email=#{email}"
+         url = $api_url + "auth/send_verification_email?email=#{email}"
          result = send_http_request(url, "POST", nil, nil)
          if result["code"] == 200
             JSON.parse(result["body"])
@@ -51,7 +64,7 @@ module Dav
       end
       
       def self.send_reset_password_email(email)
-         url = $api_url + "users/send_reset_password_email?email=#{email}"
+         url = $api_url + "auth/send_reset_password_email?email=#{email}"
          result = send_http_request(url, "POST", nil, nil)
          if result["code"] == 200
             JSON.parse(result["body"])
@@ -61,7 +74,7 @@ module Dav
       end
 
       def self.set_password(password_confirmation_token, password)
-         url = $api_url + "users/set_password/#{password_confirmation_token}?password=#{password}"
+         url = $api_url + "auth/set_password/#{password_confirmation_token}?password=#{password}"
          result = send_http_request(url, "POST", nil, nil)
          if result["code"] == 200
             JSON.parse(result["body"])
@@ -71,7 +84,7 @@ module Dav
       end
       
       def self.save_new_password(id, password_confirmation_token)
-         url = $api_url + "users/#{id}/save_new_password/#{password_confirmation_token}"
+         url = $api_url + "auth/user/#{id}/save_new_password/#{password_confirmation_token}"
          result = send_http_request(url , "POST", nil, nil)
          if result["code"] == 200
             JSON.parse(result["body"])
@@ -81,7 +94,7 @@ module Dav
       end
       
       def self.save_new_email(id, email_confirmation_token)
-         url = $api_url + "users/#{id}/save_new_email/#{email_confirmation_token}"
+         url = $api_url + "auth/user/#{id}/save_new_email/#{email_confirmation_token}"
          result = send_http_request(url, "POST", nil, nil)
          if result["code"] == 200
             JSON.parse(result["body"])
@@ -91,7 +104,7 @@ module Dav
       end
       
       def self.reset_new_email(id)
-         url = $api_url + "users/#{id}/reset_new_email"
+         url = $api_url + "auth/user/#{id}/reset_new_email"
          result = send_http_request(url, "POST", nil, nil)
          if result["code"] == 200
             JSON.parse(result["body"])
@@ -101,7 +114,7 @@ module Dav
       end
       
       def self.confirm(id, email_confirmation_token)
-         url = $api_url + "users/#{id}/confirm?email_confirmation_token=#{email_confirmation_token}"
+         url = $api_url + "auth/user/#{id}/confirm?email_confirmation_token=#{email_confirmation_token}"
          result = send_http_request(url, "POST", {"Authorization" => @jwt}, nil)
          if result["code"] == 200
             @confirmed = true
@@ -111,7 +124,7 @@ module Dav
       end
       
       def self.delete(user_id, email_confirmation_token, password_confirmation_token)
-         url = $api_url + "users/#{user_id}?email_confirmation_token=#{email_confirmation_token}&password_confirmation_token=#{password_confirmation_token}"
+         url = $api_url + "auth/user/#{user_id}?email_confirmation_token=#{email_confirmation_token}&password_confirmation_token=#{password_confirmation_token}"
          result = send_http_request(url, "DELETE", nil, nil)
          if result["code"] == 200
             JSON.parse(result["body"])
@@ -121,7 +134,7 @@ module Dav
       end
 
       def self.send_delete_account_email(email)
-         url = $api_url + "users/send_delete_account_email?email=#{email}"
+         url = $api_url + "auth/send_delete_account_email?email=#{email}"
          result = send_http_request(url, "POST", nil, nil)
          if result["code"] == 200
             JSON.parse(result["body"])
@@ -131,7 +144,7 @@ module Dav
       end
 
       def remove_app(app_id)
-         url = $api_url + "users/app/#{app_id}"
+         url = $api_url + "auth/app/#{app_id}"
          result = send_http_request(url, "DELETE", {"Authorization" => @jwt}, nil)
          if result["code"] == 200
             JSON.parse(result["body"])
