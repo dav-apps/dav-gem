@@ -99,12 +99,42 @@ module Dav
       end
 
       def create_access_token(jwt)
-         url = $api_url + "apps/access_token?object_id=#{@id}"
+         url = $api_url + "apps/object/#{@id}/access_token"
          result = send_http_request(url, "POST", {"Authorization" => jwt}, nil)
          if result["code"] == 201
-            puts result["body"]
+            return JSON.parse(result["body"])["token"]
          else
-            puts result["body"]
+            raise_error(JSON.parse result["body"])
+         end
+      end
+
+      def get_access_token(jwt)
+         url = $api_url + "apps/object/#{@id}/access_token"
+         result = send_http_request(url, "GET", {"Authorization" => jwt}, nil)
+         if result["code"] == 200
+            return JSON.parse(result["body"])["access_token"]
+         else
+            raise_error(JSON.parse result["body"])
+         end
+      end
+
+      def add_access_token(jwt, token)
+         url = $api_url + "apps/object/#{@id}/access_token/#{token}"
+         result = send_http_request(url, "PUT", {"Authorization" => jwt}, nil)
+         if result["code"] == 200
+            return true
+         else
+            raise_error(JSON.parse result["body"])
+         end
+      end
+
+      def remove_access_token(jwt, token)
+         url = $api_url + "apps/object/#{@id}/access_token/#{token}"
+         result = send_http_request(url, "DELETE", {"Authorization" => jwt}, nil)
+         if result["code"] == 200
+            return true
+         else
+            raise_error(JSON.parse result["body"])
          end
       end
    end

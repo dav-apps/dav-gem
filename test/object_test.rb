@@ -53,7 +53,7 @@ class ObjectTest < Minitest::Test
          obj2.update_file($normaloXtestuser.jwt, textfile2, "application/json", "json", nil)
          assert_equal(textfile2, obj2.file)
 
-         obj2.delete($normaloXtestuser.jwt)
+         obj.delete($normaloXtestuser.jwt)
       rescue StandardError => e
          assert false
       end
@@ -68,6 +68,7 @@ class ObjectTest < Minitest::Test
          assert false
       rescue StandardError => e
          assert e.message.include? "2307"
+         obj.delete($normaloXdav.jwt)
       end
    end
    
@@ -78,7 +79,30 @@ class ObjectTest < Minitest::Test
          assert false
       rescue StandardError => e
          assert e.message.include? "2306"
+         obj.delete($normaloXdav.jwt)
       end
    end
    # End update object tests
+
+   def test_can_create_get_add_and_remove_access_token
+      begin
+         jwt = $normaloXdav.jwt
+         obj = Dav::Object.create(jwt, $card["name"], $cards["id"], {"page1": "Hello World", "page2": "Hallo Welt"}, nil)
+         token = obj.create_access_token(jwt)
+         
+         access_tokens = obj.get_access_token(jwt)
+         assert_equal(token, access_tokens[0]["token"])
+
+         obj2 = Dav::Object.create(jwt, $card["name"], $cards["id"], {"page1": "Good day", "page2": "Guten Tag"}, nil)
+         assert obj2.add_access_token(jwt, token)
+
+         assert obj.remove_access_token(jwt, token)
+         assert obj2.remove_access_token(jwt, token)
+
+         obj.delete(jwt)
+         obj2.delete(jwt)
+      rescue StandardError => e
+         assert false
+      end
+   end
 end

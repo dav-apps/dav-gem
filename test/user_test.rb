@@ -22,9 +22,8 @@ class UserTest < Minitest::Test
       obj = Dav::Object.create($testuserXdav.jwt, $card["name"], $cards["id"], {test: "test"}, nil)
 
       user = Dav::User.get($testuserXdav.jwt, $testuser_user["id"])
-      if assert(user.apps[0])
-         obj.delete($testuserXdav.jwt);
-      end
+      assert(user.apps[0])
+      obj.delete($testuserXdav.jwt)
    end
    # End get tests
    
