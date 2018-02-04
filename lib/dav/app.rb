@@ -1,6 +1,6 @@
 module Dav
    class App
-      attr_reader :name, :description, :published, :id, :link_web, :link_play, :link_windows
+      attr_reader :name, :description, :published, :id, :link_web, :link_play, :link_windows, :used_storage
       
       def initialize(attributes)
          @id = attributes["id"]
@@ -10,6 +10,7 @@ module Dav
          @link_web = attributes["link_web"]
          @link_play = attributes["link_play"]
          @link_windows = attributes["link_windows"]
+         @used_storage = attributes["used_storage"]
       end
       
       def self.create(jwt, name, desc)

@@ -128,6 +128,7 @@ def send_http_request(url, http_method, headers, body)
    result = Hash.new
    result["body"] = response.body
    result["code"] = response.code.to_i
+   result["content-type"] = response["content-type"]
    return result
 end
 
