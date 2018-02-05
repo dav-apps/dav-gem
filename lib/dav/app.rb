@@ -1,6 +1,6 @@
 module Dav
    class App
-      attr_reader :name, :description, :published, :id, :link_web, :link_play, :link_windows, :used_storage, :tables
+      attr_reader :name, :description, :published, :id, :link_web, :link_play, :link_windows, :used_storage, :tables, :events
       
       def initialize(attributes)
          @id = attributes["id"]
@@ -12,6 +12,7 @@ module Dav
          @link_windows = attributes["link_windows"]
          @used_storage = attributes["used_storage"]
          @tables = convert_json_to_tables_array(attributes["tables"]) if attributes["tables"]
+         @events = convert_json_to_events_array(attributes["events"]) if attributes["events"]
       end
       
       def self.create(jwt, name, desc)

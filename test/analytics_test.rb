@@ -3,7 +3,12 @@ require "test_helper"
 class AnalyticsTest < Minitest::Test
    # Log tests
    def test_can_log
-      Dav::Event.log($testuser_dev_auth, $testapp["id"], "TestLog")
+      begin
+         Dav::Event.log($testuser_dev_auth, $testapp["id"], "TestLog")
+         assert true
+      rescue StandardError => e
+         assert false
+      end
    end
    
    def test_cant_log_with_too_short_name
@@ -24,4 +29,23 @@ class AnalyticsTest < Minitest::Test
       end
    end
    # End log tests
+
+   def test_can_create_get_update_and_delete_event
+      begin
+         event_name = "TestLog"
+         new_event_name = "TestLog2"
+
+         Dav::Event.log($testuser_dev_auth, $testapp["id"], event_name)
+         event = Dav::Event.get_by_name($testuserXdav.jwt, event_name)
+         assert_equal(event_name, event.name)
+         
+         event.update($testuserXdav.jwt, new_event_name)
+         assert_equal(new_event_name, event.name)
+
+         event.delete($testuserXdav.jwt)
+         assert true
+      rescue StandardError => e
+         assert false
+      end
+   end
 end

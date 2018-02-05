@@ -147,3 +147,11 @@ def convert_json_to_tables_array(json)
    end
    return tables_array
 end
+
+def convert_json_to_events_array(json)
+   events_array = Array.new
+   json.each do |event|
+      events_array.push(Dav::Event.new(event))
+   end
+   return events_array
+end
