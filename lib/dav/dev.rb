@@ -1,6 +1,6 @@
 module Dav
    class Dev
-      attr_reader :id, :api_key, :secret_key, :user_id, :uuid
+      attr_reader :id, :api_key, :secret_key, :user_id, :uuid, :apps
       
       def initialize(attributes)
          @id = attributes["id"]
@@ -8,6 +8,7 @@ module Dav
          @secret_key = attributes["secret_key"]
          @user_id = attributes["user_id"]
          @uuid = attributes["uuid"]
+         @apps = convert_json_to_apps_array(attributes["apps"]) if attributes["apps"]
       end
       
       def self.create(jwt)
