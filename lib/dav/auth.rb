@@ -137,5 +137,13 @@ def convert_json_to_apps_array(json)
    json.each do |app|
       apps_array.push(Dav::App.new(app))
    end
-   apps_array
+   return apps_array
+end
+
+def convert_json_to_tables_array(json)
+   tables_array = Array.new
+   json.each do |table|
+      tables_array.push(Dav::Table.new(table))
+   end
+   return tables_array
 end
