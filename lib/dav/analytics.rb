@@ -18,8 +18,8 @@ module Dav
          end
       end
 
-      def self.get(jwt, id)
-         url = $api_url + "analytics/event/#{id}"
+      def self.get(jwt, id, app_id)
+         url = $api_url + "analytics/event/#{id}?app_id=#{app_id}"
          result = send_http_request(url, "GET", {"Authorization" => jwt}, nil)
 
          if result["code"] == 200
@@ -29,8 +29,8 @@ module Dav
          end
       end
 
-      def self.get_by_name(jwt, name)
-         url = $api_url + "analytics/event?name=#{name}"
+      def self.get_by_name(jwt, name, app_id)
+         url = $api_url + "analytics/event?name=#{name}&app_id=#{app_id}"
          result = send_http_request(url, "GET", {"Authorization" => jwt}, nil)
 
          if result["code"] == 200
