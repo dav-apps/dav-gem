@@ -10,7 +10,7 @@ module Dav
          @uuid = uuid
          
          if environment == "production"
-            $api_url = "https://dav-backend.westeurope.cloudapp.azure.com/v1/"
+            $api_url = ENV["API_BASE_URL"]
          else
             $api_url = "http://localhost:3111/v1/"
          end
