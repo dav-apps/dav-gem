@@ -6,6 +6,7 @@ require "dav/analytics"
 require "dav/table"
 require "dav/object"
 require "dav/dev"
+require "dav/archive"
 
 module Dav
    
