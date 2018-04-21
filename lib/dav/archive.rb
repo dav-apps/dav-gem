@@ -1,12 +1,13 @@
 module Dav
 	class Archive
-		attr_accessor :id, :user_id, :name, :completed
+		attr_accessor :id, :user_id, :name, :completed, :created_at
 
 		def initialize(attributes)
 			@id = attributes["id"]
 			@user_id = attributes["user_id"]
 			@name = attributes["name"]
 			@completed = attributes["completed"]
+			@created_at = attributes["created_at"]
 		end
 
 		def self.create(jwt)
