@@ -46,6 +46,7 @@ module Dav
 
          if result["code"] == 200
             @name = name
+            return self
          else
             raise_error(JSON.parse(result["body"]))
          end

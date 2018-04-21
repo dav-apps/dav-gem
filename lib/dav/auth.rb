@@ -155,3 +155,11 @@ def convert_json_to_events_array(json)
    end
    return events_array
 end
+
+def convert_json_to_archives_array(json)
+   archives_array = Array.new
+   json.each do |archive|
+      archives_array.push(Dav::Archive.new(archive))
+   end
+   return archives_array
+end
