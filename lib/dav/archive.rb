@@ -36,7 +36,7 @@ module Dav
 
 		def delete(jwt)
 			url = $api_url + "auth/archive/#{@id}"
-			result = send_http_request(url, "GET", {"Authorization" => jwt}, nil)
+			result = send_http_request(url, "DELETE", {"Authorization" => jwt}, nil)
 
 			if result["code"] == 200
             JSON.parse(result["body"])
