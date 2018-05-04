@@ -1,6 +1,9 @@
 module Dav
    class User
-      attr_accessor :email, :username, :confirmed, :new_email, :old_email, :jwt, :id, :apps, :plan, :avatar, :total_storage, :used_storage, :archives
+      attr_accessor :email, :username, :confirmed, :new_email, 
+                     :old_email, :jwt, :id, :apps, :plan, 
+                     :avatar, :total_storage, :used_storage, 
+                     :archives, :period_end
       
       def initialize(attributes)
          @id = attributes["id"]
@@ -15,6 +18,7 @@ module Dav
          @total_storage = attributes["total_storage"]
          @used_storage = attributes["used_storage"]
          @archives = convert_json_to_archives_array(attributes["archives"])
+         @period_end = attributes["period_end"]
       end
       
       def self.get(jwt, user_id)
@@ -45,17 +49,19 @@ module Dav
          url = $api_url + "auth/user"
          result = send_http_request(url, "PUT", {"Authorization" => @jwt, "Content-Type" => "application/json"}, properties)
          if result["code"] == 200
-            @email = JSON.parse(result["body"])["email"]
-            @username = JSON.parse(result["body"])["username"]
-            @confirmed = JSON.parse(result["body"])["confirmed"]
-            @new_email = JSON.parse(result["body"])["new_email"]
-            @old_email = JSON.parse(result["body"])["old_email"]
-            @apps = convert_json_to_apps_array(JSON.parse(result["body"])["apps"])
-            @plan = JSON.parse(result["body"])["plan"]
-            @avatar = JSON.parse(result["body"])["avatar"]
-            @total_storage = JSON.parse(result["body"])["total_storage"]
-            @used_storage = JSON.parse(result["body"])["used_storage"]
-            @archives = convert_json_to_archives_array(JSON.parse(result["body"])["archives"])
+            body = JSON.parse(result["body"])
+            @email = body["email"]
+            @username = body["username"]
+            @confirmed = body["confirmed"]
+            @new_email = body["new_email"]
+            @old_email = body["old_email"]
+            @apps = convert_json_to_apps_array(body["apps"])
+            @plan = body["plan"]
+            @avatar = body["avatar"]
+            @total_storage = body["total_storage"]
+            @used_storage = body["used_storage"]
+            @archives = convert_json_to_archives_array(body["archives"])
+            @period_end = body["period_end"]
          else
             raise_error(JSON.parse result["body"])
          end
