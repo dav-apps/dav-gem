@@ -3,7 +3,7 @@ module Dav
       attr_accessor :email, :username, :confirmed, :new_email, 
                      :old_email, :jwt, :id, :apps, :plan, 
                      :avatar, :total_storage, :used_storage, 
-                     :archives, :period_end
+                     :archives, :period_end, :subscription_status
       
       def initialize(attributes)
          @id = attributes["id"]
@@ -19,6 +19,7 @@ module Dav
          @used_storage = attributes["used_storage"]
          @archives = convert_json_to_archives_array(attributes["archives"])
          @period_end = attributes["period_end"]
+         @subscription_status = attributes["subscription_status"]
       end
       
       def self.get(jwt, user_id)
@@ -62,6 +63,7 @@ module Dav
             @used_storage = body["used_storage"]
             @archives = convert_json_to_archives_array(body["archives"])
             @period_end = body["period_end"]
+            @subscription_status = body["subscription_status"]
          else
             raise_error(JSON.parse result["body"])
          end
