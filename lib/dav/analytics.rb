@@ -5,11 +5,15 @@ module Dav
       def initialize(attributes)
          @id = attributes["id"]
          @name = attributes["name"]
-         @logs = attributes["logs"]
+			@logs = attributes["logs"]
       end
       
-      def self.log(auth, app_id, name)
-         url = $api_url + "analytics/event?name=#{name}&app_id=#{app_id}"
+      def self.log(auth, app_id, name, data)
+			url = $api_url + "analytics/event?name=#{name}&app_id=#{app_id}"
+			if data
+				url += "&data=#{data}"
+			end
+
          result = send_http_request(url, "POST", {"Authorization" => create_auth_token(auth)}, nil)
          if result["code"] == 201
             event = Event.new(JSON.parse(result["body"]))
