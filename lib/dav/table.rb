@@ -6,7 +6,7 @@ module Dav
          @id = attributes["id"]
          @app_id = attributes["app_id"]
          @name = attributes["name"]
-         @entries = attributes["entries"]
+         @table_objects = attributes["table_objects"]
       end
       
       def self.create(jwt, table_name, app_id)
@@ -28,6 +28,16 @@ module Dav
             raise_error(JSON.parse result["body"])
          end
       end
+
+      def self.get_by_id(jwt, table_id)
+         url = $api_url + "apps/table/#{table_id}"
+         result = send_http_request(url, "GET", {"Authorization" => jwt}, nil)
+         if result["code"] == 200
+            Table.new(JSON.parse result["body"])
+         else
+            raise_error(JSON.parse result["body"])
+         end
+      end
       
       def update(jwt, properties)
          url = $api_url + "apps/table/#{@id}"
@@ -35,7 +45,7 @@ module Dav
          if result["code"] == 200
             # Update local objects
             @name = properties["name"]
-            @entries = properties["entries"]
+            @table_objects = properties["table_objects"]
          else
             raise_error(JSON.parse result["body"])
          end

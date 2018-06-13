@@ -1,6 +1,6 @@
 module Dav
    class Object
-      attr_reader :id, :table_id, :user_id, :uuid, :visibility, :is_file, :properties
+      attr_reader :id, :table_id, :user_id, :uuid, :visibility, :is_file, :properties, :etag
       attr_accessor :file
       
       def initialize(attributes)
@@ -11,6 +11,7 @@ module Dav
          @visibility = attributes["visibility"]
          @properties = attributes["properties"]
          @is_file = attributes["file"]
+         @etag = attributes["etag"]
       end
       
       def self.create(jwt, table_name, app_id, properties, visibility)
