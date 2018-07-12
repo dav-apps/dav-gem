@@ -71,9 +71,9 @@ module Dav
          end
       end
       
-      def log_event(auth, name)
-         url = $api_url + "analytics/event?name=#{name}&app_id=#{@id}"
-         result = send_http_request(url, "POST", {"Authorization" => create_auth_token(auth)}, nil)
+      def log_event(api_key, name, data)
+         url = $api_url + "analytics/event?api_key=#{api_key}&name=#{name}&app_id=#{@id}"
+         result = send_http_request(url, "POST", nil, data)
          if result["code"] == 201
             event = Event.new(JSON.parse result["body"])
          else

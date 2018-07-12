@@ -102,8 +102,14 @@ class AppTest < Minitest::Test
    
    # Log event tests
    def test_can_log_event
-      testapp = Dav::App.get($testuserXdav.jwt, $testapp["id"])
-      testapp.log_event($testuser_dev_auth, "TestEvent")
+      begin
+         testapp = Dav::App.get($testuserXdav.jwt, $testapp["id"])
+         testapp.log_event($testuser_dev["api_key"], "TestEvent", "testdata")
+         assert true
+      rescue StandardError => e
+         puts e
+         assert false
+      end
    end
    # End log event tests
 end

@@ -30,7 +30,7 @@ class TableTest < Minitest::Test
    
    def test_cant_create_table_with_too_long_name
       begin
-         testtable = Dav::Table.create($testuserXdav.jwt, "T"*40, $testapp["id"])
+         testtable = Dav::Table.create($testuserXdav.jwt, "T"*240, $testapp["id"])
          assert false
       rescue StandardError => e
          assert e.message.include? "2305"

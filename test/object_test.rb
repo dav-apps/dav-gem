@@ -24,7 +24,7 @@ class ObjectTest < Minitest::Test
    
    def test_cant_create_object_with_too_long_property_value
       begin
-         obj = Dav::Object.create($normaloXdav.jwt, $card["name"], $cards["id"], {"property" => "hallo"*500}, nil)
+         obj = Dav::Object.create($normaloXdav.jwt, $card["name"], $cards["id"], {"property" => "hallo"*65100}, nil)
          assert false
       rescue StandardError => e
          assert e.message.include? "2307"
@@ -33,7 +33,7 @@ class ObjectTest < Minitest::Test
    
    def test_cant_create_object_with_too_long_property_name
       begin
-         obj = Dav::Object.create($normaloXdav.jwt, $card["name"], $cards["id"], {"p"*30 => "hello"}, nil)
+         obj = Dav::Object.create($normaloXdav.jwt, $card["name"], $cards["id"], {"p"*240 => "hello"}, nil)
          assert false
       rescue StandardError => e
          assert e.message.include? "2306"
@@ -64,7 +64,7 @@ class ObjectTest < Minitest::Test
    def test_cant_update_object_with_too_long_property_value
       begin
          obj = Dav::Object.create($normaloXdav.jwt, $card["name"], $cards["id"], {"property" => "hallo"}, nil)
-         obj.update($normaloXdav.jwt, {"property" => "hallo"*500}, nil)
+         obj.update($normaloXdav.jwt, {"property" => "hallo"*65100}, nil)
          assert false
       rescue StandardError => e
          assert e.message.include? "2307"
@@ -75,7 +75,7 @@ class ObjectTest < Minitest::Test
    def test_cant_update_object_with_too_long_property_name
       begin
          obj = Dav::Object.create($normaloXdav.jwt, $card["name"], $cards["id"], {"property" => "hello"}, nil)
-         obj.update($normaloXdav.jwt, {"p"*30 => "hallo"}, nil)
+         obj.update($normaloXdav.jwt, {"p"*240 => "hallo"}, nil)
          assert false
       rescue StandardError => e
          assert e.message.include? "2306"

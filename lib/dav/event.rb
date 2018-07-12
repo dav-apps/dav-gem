@@ -8,13 +8,10 @@ module Dav
 			@logs = attributes["logs"]
       end
       
-      def self.log(auth, app_id, name, data)
-			url = $api_url + "analytics/event?name=#{name}&app_id=#{app_id}"
-			if data
-				url += "&data=#{data}"
-			end
+      def self.log(api_key, app_id, name, data)
+			url = $api_url + "analytics/event?api_key=#{api_key}&name=#{name}&app_id=#{app_id}"
 
-         result = send_http_request(url, "POST", {"Authorization" => create_auth_token(auth)}, nil)
+         result = send_http_request(url, "POST", nil, data)
          if result["code"] == 201
             event = Event.new(JSON.parse(result["body"]))
          else
