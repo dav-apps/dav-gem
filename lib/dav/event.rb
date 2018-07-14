@@ -1,26 +1,35 @@
 module Dav
 	class Event
-      attr_reader :id, :name, :logs
+		attr_reader :id, :name
+		attr_accessor :logs
       
       def initialize(attributes)
          @id = attributes["id"]
-         @name = attributes["name"]
-			@logs = attributes["logs"]
-      end
+			@name = attributes["name"]
+			
+			if attributes["logs"]
+				@logs = convert_json_to_event_logs_array(attributes["logs"])
+				@logs.each { |log| log.event_id = @id }
+			end
+		end
       
-      def self.log(api_key, app_id, name, data)
-			url = $api_url + "analytics/event?api_key=#{api_key}&name=#{name}&app_id=#{app_id}"
+      def self.log(api_key, app_id, name, properties, save_country = false)
+			url = $api_url + "analytics/event?api_key=#{api_key}&name=#{name}&app_id=#{app_id}&save_country=#{save_country}"
 
-         result = send_http_request(url, "POST", nil, data)
+         result = send_http_request(url, "POST", {"Content-Type" => "application/json"}, properties)
          if result["code"] == 201
-            event = Event.new(JSON.parse(result["body"]))
+				log = EventLog.new(JSON.parse(result["body"]))
+
+				if @logs
+					@logs.push(log)
+				end
          else
             raise_error(JSON.parse(result["body"]))
          end
-      end
+		end
 
-      def self.get(jwt, id, app_id)
-         url = $api_url + "analytics/event/#{id}?app_id=#{app_id}"
+      def self.get(jwt, id)
+         url = $api_url + "analytics/event/#{id}"
          result = send_http_request(url, "GET", {"Authorization" => jwt}, nil)
 
          if result["code"] == 200

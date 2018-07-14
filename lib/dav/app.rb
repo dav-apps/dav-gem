@@ -71,11 +71,11 @@ module Dav
          end
       end
       
-      def log_event(api_key, name, data)
-         url = $api_url + "analytics/event?api_key=#{api_key}&name=#{name}&app_id=#{@id}"
-         result = send_http_request(url, "POST", nil, data)
+      def log_event(api_key, name, properties, save_country = false)
+         url = $api_url + "analytics/event?api_key=#{api_key}&name=#{name}&app_id=#{@id}&save_country=#{save_country}"
+         result = send_http_request(url, "POST", {"Content-Type" => "application/json"}, properties)
          if result["code"] == 201
-            event = Event.new(JSON.parse result["body"])
+            return Event.new(JSON.parse result["body"])
          else
             raise_error(JSON.parse(result["body"]))
          end

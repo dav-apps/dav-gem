@@ -156,10 +156,26 @@ def convert_json_to_events_array(json)
    return events_array
 end
 
+def convert_json_to_event_logs_array(json)
+   event_logs_array = Array.new
+   json.each do |log|
+      event_logs_array.push(Dav::EventLog.new(log))
+   end
+   return event_logs_array
+end
+
 def convert_json_to_archives_array(json)
    archives_array = Array.new
    json.each do |archive|
       archives_array.push(Dav::Archive.new(archive))
    end
    return archives_array
+end
+
+def convert_json_to_table_objects_array(json)
+   table_objects_array = Array.new
+   json.each do |obj|
+      table_objects_array.push(Dav::Object.new(obj))
+   end
+   return table_objects_array
 end

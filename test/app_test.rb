@@ -66,6 +66,7 @@ class AppTest < Minitest::Test
          testapp = Dav::App.get($testuserXdav.jwt, $testapp["id"])
          assert true
       rescue StandardError => e
+         puts e
          assert false
       end
    end
@@ -104,10 +105,9 @@ class AppTest < Minitest::Test
    def test_can_log_event
       begin
          testapp = Dav::App.get($testuserXdav.jwt, $testapp["id"])
-         testapp.log_event($testuser_dev["api_key"], "TestEvent", "testdata")
+         testapp.log_event($testuser_dev["api_key"], "TestEvent", {"test" => "test"}, false)
          assert true
       rescue StandardError => e
-         puts e
          assert false
       end
    end
