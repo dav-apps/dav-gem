@@ -6,7 +6,7 @@ class AnalyticsTest < Minitest::Test
          event_name = "TestLog"
          new_event_name = "TestLog2"
 
-         Dav::Event.log($testuser_dev["api_key"], $testapp["id"], event_name, "testdata")
+         Dav::Event.log($testuser_dev["api_key"], $testapp["id"], event_name, {"test": "testdata"})
          event = Dav::Event.get_by_name($testuserXdav.jwt, event_name, $testapp["id"])
          assert_equal(event_name, event.name)
          
