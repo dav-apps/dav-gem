@@ -8,6 +8,7 @@ module Dav
 			@name = attributes["name"]
 			@completed = attributes["completed"]
 			@created_at = attributes["created_at"]
+			@parts = Array.new
 
 			if attributes["parts"]
 				@parts = convert_json_to_archive_parts_array(attributes["parts"])

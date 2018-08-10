@@ -6,6 +6,7 @@ module Dav
       def initialize(attributes)
          @id = attributes["id"]
 			@name = attributes["name"]
+			@logs = Array.new
 			
 			if attributes["logs"]
 				@logs = convert_json_to_event_logs_array(attributes["logs"])
