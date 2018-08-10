@@ -1,6 +1,6 @@
 module Dav
 	class Archive
-		attr_accessor :id, :user_id, :name, :completed, :created_at
+		attr_accessor :id, :user_id, :name, :completed, :created_at, :parts
 
 		def initialize(attributes)
 			@id = attributes["id"]
@@ -8,6 +8,11 @@ module Dav
 			@name = attributes["name"]
 			@completed = attributes["completed"]
 			@created_at = attributes["created_at"]
+
+			if attributes["parts"]
+				@parts = convert_json_to_archive_parts_array(attributes["parts"])
+				@parts.each { |part| part.archive_id = @id }
+			end
 		end
 
 		def self.create(jwt)

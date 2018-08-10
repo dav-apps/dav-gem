@@ -9,6 +9,7 @@ require "dav/table"
 require "dav/object"
 require "dav/dev"
 require "dav/archive"
+require "dav/archive_part"
 
 module Dav
    

@@ -172,6 +172,14 @@ def convert_json_to_archives_array(json)
    return archives_array
 end
 
+def convert_json_to_archive_parts_array(json)
+	parts_array = Array.new
+	json.each do |part|
+		parts_array.push(Dav::ArchivePart.new(part))
+	end
+	return parts_array
+end
+
 def convert_json_to_table_objects_array(json)
    table_objects_array = Array.new
    json.each do |obj|
