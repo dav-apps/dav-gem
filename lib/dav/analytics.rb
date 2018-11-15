@@ -21,5 +21,16 @@ module Dav
             raise_error(JSON.parse(result["body"]))
          end
 		end
+
+		def self.get_active_users(jwt, timeframe)
+			url = $api_url + "analytics/active_users?timeframe=#{timeframe}"
+			result = send_http_request(url, "GET", {"Authorization" => jwt}, nil)
+
+			if result["code"] == 200
+				return JSON.parse(result["body"])
+			else
+				raise_error(JSON.parse(result["body"]))
+			end
+		end
 	end
 end
