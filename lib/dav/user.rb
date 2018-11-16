@@ -129,9 +129,9 @@ module Dav
          end
       end
       
-      def self.confirm(id, email_confirmation_token)
-         url = $api_url + "auth/user/#{id}/confirm?email_confirmation_token=#{email_confirmation_token}"
-         result = send_http_request(url, "POST", {"Authorization" => @jwt}, nil)
+      def self.confirm(id, email_confirmation_token, jwt, password)
+         url = $api_url + "auth/user/#{id}/confirm?email_confirmation_token=#{email_confirmation_token}&password=#{password}"
+         result = send_http_request(url, "POST", {"Authorization" => jwt}, nil)
          if result["code"] == 200
             @confirmed = true
          else
