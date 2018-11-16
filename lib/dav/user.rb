@@ -12,12 +12,12 @@ module Dav
          @confirmed = attributes["confirmed"]
          @new_email = attributes["new_email"]
          @old_email = attributes["old_email"]
-         @apps = convert_json_to_apps_array(attributes["apps"])
+         @apps = convert_json_to_apps_array(attributes["apps"]) if attributes["apps"]
          @plan = attributes["plan"]
          @avatar = attributes["avatar"]
          @total_storage = attributes["total_storage"]
          @used_storage = attributes["used_storage"]
-         @archives = convert_json_to_archives_array(attributes["archives"])
+         @archives = convert_json_to_archives_array(attributes["archives"]) if attributes["archives"]
          @period_end = attributes["period_end"]
          @subscription_status = attributes["subscription_status"]
       end

@@ -67,7 +67,11 @@ module Dav
          url = $api_url + "auth/signup?email=#{email}&password=#{password}&username=#{username}"
          result = send_http_request(url, "POST", {"Authorization" => create_auth_token(self)}, nil)
          if result["code"] == 201
-            JSON.parse result["body"]
+            json = JSON.parse result["body"]
+
+				user = Dav::User.new(json)
+				user.jwt = json["jwt"]
+				return user
          else
             raise_error(JSON.parse(result["body"]))
          end
