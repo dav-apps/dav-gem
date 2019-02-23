@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    dav (0.6)
+    dav (0.7)
 
 GEM
   remote: https://rubygems.org/

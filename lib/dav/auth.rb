@@ -168,6 +168,14 @@ def convert_json_to_event_logs_array(json)
    return event_logs_array
 end
 
+def convert_json_to_event_summaries_array(json)
+   event_summaries_array = Array.new
+   json.each do |summary|
+      event_summaries_array.push(Dav::EventSummary.new(summary))
+   end
+   return event_summaries_array
+end
+
 def convert_json_to_archives_array(json)
    archives_array = Array.new
    json.each do |archive|

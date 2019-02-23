@@ -9,8 +9,12 @@ module Dav
 			@logs = Array.new
 			
 			if attributes["logs"]
-				@logs = convert_json_to_event_logs_array(attributes["logs"])
-				@logs.each { |log| log.event_id = @id }
+				@logs = convert_json_to_event_summaries_array(attributes["logs"])
+            @logs.each { |log| log.event_id = @id }
+            @logs.each do |log|
+               log.event_id = @id
+               log.period = attributes["period"]
+            end
 			end
 		end
       
@@ -29,8 +33,8 @@ module Dav
          end
 		end
 
-      def self.get(jwt, id, start_timestamp = 0, end_timestamp = Time.now)
-         url = $api_url + "analytics/event/#{id}?start=#{start_timestamp}&end=#{end_timestamp}"
+      def self.get(jwt, id, sort = "day", start_timestamp = 0, end_timestamp = Time.now)
+         url = $api_url + "analytics/event/#{id}?sort=#{sort}&start=#{start_timestamp}&end=#{end_timestamp}"
          result = send_http_request(url, "GET", {"Authorization" => jwt}, nil)
 
          if result["code"] == 200
@@ -40,8 +44,8 @@ module Dav
          end
       end
 
-      def self.get_by_name(jwt, name, app_id, start_timestamp = 0, end_timestamp = Time.now)
-         url = $api_url + "analytics/event?name=#{name}&app_id=#{app_id}&start=#{start_timestamp}&end=#{end_timestamp}"
+      def self.get_by_name(jwt, name, app_id, sort = "day", start_timestamp = 0, end_timestamp = Time.now)
+         url = $api_url + "analytics/event?name=#{name}&app_id=#{app_id}&sort=#{sort}&start=#{start_timestamp}&end=#{end_timestamp}"
          result = send_http_request(url, "GET", {"Authorization" => jwt}, nil)
 
          if result["code"] == 200
