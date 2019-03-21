@@ -22,12 +22,12 @@ module Dav
          end
 		end
 
-		def self.get_active_users(jwt, timeframe)
-			url = $api_url + "analytics/active_users?timeframe=#{timeframe}"
+		def self.get_active_users(jwt, start_timestamp = Time.now.to_i - 2629746, end_timestamp = Time.now.to_i)
+			url = $api_url + "analytics/active_users?start=#{start_timestamp}&end=#{end_timestamp}"
 			result = send_http_request(url, "GET", {"Authorization" => jwt}, nil)
 
 			if result["code"] == 200
-				return JSON.parse(result["body"])
+				return convert_json_to_active_users_array(JSON.parse(result["body"])["days"])
 			else
 				raise_error(JSON.parse(result["body"]))
 			end

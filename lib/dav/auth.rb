@@ -11,8 +11,8 @@ module Dav
          
          if environment == "production"
             $api_url = ENV["API_BASE_URL"]
-         else
-            $api_url = "http://localhost:3111/v1/"
+			else
+				$api_url = "http://localhost:3111/v1/"
          end
       end
       
@@ -198,4 +198,12 @@ def convert_json_to_table_objects_array(json)
       table_objects_array.push(Dav::Object.new(obj))
    end
    return table_objects_array
+end
+
+def convert_json_to_active_users_array(json)
+	active_users_array = Array.new
+	json.each do |active_user|
+		active_users_array.push(Dav::ActiveUser.new(active_user))
+	end
+	return active_users_array
 end
