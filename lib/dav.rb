@@ -11,6 +11,7 @@ require "dav/object"
 require "dav/dev"
 require "dav/archive"
 require "dav/archive_part"
+require "dav/active_user"
 
 module Dav
    
