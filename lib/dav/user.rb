@@ -18,7 +18,7 @@ module Dav
          @total_storage = attributes["total_storage"]
          @used_storage = attributes["used_storage"]
          @archives = convert_json_to_archives_array(attributes["archives"]) if attributes["archives"]
-         @period_end = DateTime.parse(attributes["period_end"])
+         @period_end = attributes["period_end"] ? DateTime.parse(attributes["period_end"]) : nil
          @subscription_status = attributes["subscription_status"]
       end
       
@@ -62,7 +62,7 @@ module Dav
             @total_storage = body["total_storage"]
             @used_storage = body["used_storage"]
             @archives = convert_json_to_archives_array(body["archives"])
-            @period_end = DateTime.parse(body["period_end"])
+            @period_end = body["period_end"] ? DateTime.parse(body["period_end"]) : nil
             @subscription_status = body["subscription_status"]
          else
             raise_error(JSON.parse result["body"])
