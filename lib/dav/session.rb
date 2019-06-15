@@ -1,12 +1,13 @@
 module Dav
 	class Session
-		attr_accessor :id, :user_id, :app_id, :exp
+		attr_accessor :id, :user_id, :app_id, :exp, :jwt
 
 		def initialize(attributes)
 			@id = attributes["id"]
 			@user_id = attributes["user_id"]
 			@app_id = attributes["app_id"]
-			@exp = attributes["exp"]
+         @exp = attributes["exp"]
+         @jwt = attributes["jwt"]
 		end
 
 		def self.create(auth_token, email, password, api_key, app_id)
