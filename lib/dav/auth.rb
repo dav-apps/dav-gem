@@ -42,25 +42,25 @@ module Dav
 
       def self.login_by_jwt(jwt, api_key)
          login_url = $api_url + "auth/login_by_jwt?api_key=#{api_key}"
-         login_result = send_http_request(login_url, "GET", {"Authorization" => jwt}, nil)
-         if login_result["code"] == 200
-            jwt = JSON.parse(login_result["body"])["jwt"]
-            user_id = JSON.parse(login_result["body"])["user_id"]
-            
-            # Get the user details with the user id and create new User object
-            get_user_url = "#{$api_url}auth/user/#{user_id}"
-            get_result = send_http_request(get_user_url, "GET", {"Authorization" => jwt}, nil)
-            if get_result["code"] == 200
-               user = Dav::User.new(JSON.parse get_result["body"])
-               user.jwt = jwt
-               user.id = user_id
-               user
-            else
-               raise_error(JSON.parse get_result["body"])
-            end
-         else
-            raise_error(JSON.parse login_result["body"])
-         end
+			login_result = send_http_request(login_url, "GET", {"Authorization" => jwt}, nil)
+			if login_result["code"] == 200
+				jwt = JSON.parse(login_result["body"])["jwt"]
+				user_id = JSON.parse(login_result["body"])["user_id"]
+				
+				# Get the user details with the user id and create new User object
+				get_user_url = "#{$api_url}auth/user/#{user_id}"
+				get_result = send_http_request(get_user_url, "GET", {"Authorization" => jwt}, nil)
+				if get_result["code"] == 200
+					user = Dav::User.new(JSON.parse get_result["body"])
+					user.jwt = jwt
+					user.id = user_id
+					user
+				else
+					raise_error(JSON.parse get_result["body"])
+				end
+			else
+				raise_error(JSON.parse login_result["body"])
+			end
       end
       
       def signup(email, password, username)
@@ -71,6 +71,10 @@ module Dav
          else
             raise_error(JSON.parse(result["body"]))
          end
+      end
+
+      def get_token
+         create_auth_token(self)
       end
    end
 end
