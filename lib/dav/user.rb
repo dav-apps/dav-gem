@@ -12,13 +12,13 @@ module Dav
          @confirmed = attributes["confirmed"]
          @new_email = attributes["new_email"]
          @old_email = attributes["old_email"]
-         @apps = convert_json_to_apps_array(attributes["apps"])
+         @apps = convert_json_to_apps_array(attributes["apps"]) if attributes["apps"]
          @plan = attributes["plan"]
          @avatar = attributes["avatar"]
          @total_storage = attributes["total_storage"]
          @used_storage = attributes["used_storage"]
-         @archives = convert_json_to_archives_array(attributes["archives"])
-         @period_end = attributes["period_end"]
+         @archives = convert_json_to_archives_array(attributes["archives"]) if attributes["archives"]
+         @period_end = attributes["period_end"] ? DateTime.parse(attributes["period_end"]) : nil
          @subscription_status = attributes["subscription_status"]
       end
       
@@ -62,7 +62,7 @@ module Dav
             @total_storage = body["total_storage"]
             @used_storage = body["used_storage"]
             @archives = convert_json_to_archives_array(body["archives"])
-            @period_end = body["period_end"]
+            @period_end = body["period_end"] ? DateTime.parse(body["period_end"]) : nil
             @subscription_status = body["subscription_status"]
          else
             raise_error(JSON.parse result["body"])
@@ -129,9 +129,9 @@ module Dav
          end
       end
       
-      def self.confirm(id, email_confirmation_token)
-         url = $api_url + "auth/user/#{id}/confirm?email_confirmation_token=#{email_confirmation_token}"
-         result = send_http_request(url, "POST", {"Authorization" => @jwt}, nil)
+      def self.confirm(id, email_confirmation_token, jwt, password)
+         url = $api_url + "auth/user/#{id}/confirm?email_confirmation_token=#{email_confirmation_token}&password=#{password}"
+         result = send_http_request(url, "POST", {"Authorization" => jwt}, nil)
          if result["code"] == 200
             @confirmed = true
          else

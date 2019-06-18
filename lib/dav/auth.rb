@@ -11,8 +11,8 @@ module Dav
          
          if environment == "production"
             $api_url = ENV["API_BASE_URL"]
-         else
-            $api_url = "http://localhost:3111/v1/"
+			else
+				$api_url = "http://localhost:3111/v1/"
          end
       end
       
@@ -67,7 +67,11 @@ module Dav
          url = $api_url + "auth/signup?email=#{email}&password=#{password}&username=#{username}"
          result = send_http_request(url, "POST", {"Authorization" => create_auth_token(self)}, nil)
          if result["code"] == 201
-            JSON.parse result["body"]
+            json = JSON.parse result["body"]
+
+				user = Dav::User.new(json)
+				user.jwt = json["jwt"]
+				return user
          else
             raise_error(JSON.parse(result["body"]))
          end
@@ -168,6 +172,14 @@ def convert_json_to_event_logs_array(json)
    return event_logs_array
 end
 
+def convert_json_to_event_summaries_array(json)
+   event_summaries_array = Array.new
+   json.each do |summary|
+      event_summaries_array.push(Dav::EventSummary.new(summary))
+   end
+   return event_summaries_array
+end
+
 def convert_json_to_archives_array(json)
    archives_array = Array.new
    json.each do |archive|
@@ -190,4 +202,12 @@ def convert_json_to_table_objects_array(json)
       table_objects_array.push(Dav::Object.new(obj))
    end
    return table_objects_array
+end
+
+def convert_json_to_active_users_array(json)
+	active_users_array = Array.new
+	json.each do |active_user|
+		active_users_array.push(Dav::ActiveUser.new(active_user))
+	end
+	return active_users_array
 end
