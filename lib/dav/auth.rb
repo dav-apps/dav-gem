@@ -75,7 +75,21 @@ module Dav
          else
             raise_error(JSON.parse(result["body"]))
          end
-      end
+		end
+		
+		def signup_with_session(email, password, username, app_id, api_key, device_name, device_type, device_os)
+			url = $api_url + "auth/signup?email=#{email}&password=#{password}&username=#{username}&app_id=#{app_id}"
+			result = send_http_request(url, "POST", {"Authorization" => create_auth_token(self)}, {api_key: api_key, device_name: device_name, device_type: device_type, device_os: device_os})
+			if result["code"] == 201
+				json = JSON.parse(result["body"])
+
+				user = Dav::User.new(json)
+				user.jwt = json["jwt"]
+				return user
+			else
+				raise_error(JSON.parse(result["body"]))
+			end
+		end
 
       def get_token
          create_auth_token(self)
