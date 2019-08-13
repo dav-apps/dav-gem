@@ -15,7 +15,7 @@ module Dav
          if result["code"] == 201
             Table.new(JSON.parse result["body"])
          else
-            raise_error(JSON.parse result["body"])
+            raise_error(result["body"])
          end
       end
       
@@ -25,7 +25,7 @@ module Dav
          if result["code"] == 200
             Table.new(JSON.parse result["body"])
          else
-            raise_error(JSON.parse result["body"])
+            raise_error(result["body"])
          end
       end
 
@@ -35,7 +35,7 @@ module Dav
          if result["code"] == 200
             Table.new(JSON.parse result["body"])
          else
-            raise_error(JSON.parse result["body"])
+            raise_error(result["body"])
          end
       end
       
@@ -47,7 +47,7 @@ module Dav
             @name = properties["name"]
             @table_objects = properties["table_objects"]
          else
-            raise_error(JSON.parse result["body"])
+            raise_error(result["body"])
          end
       end
       
@@ -57,7 +57,7 @@ module Dav
          if result["code"] == 200
             result["body"]
          else
-            raise_error(JSON.parse result["body"])
+            raise_error(result["body"])
          end
       end
    end

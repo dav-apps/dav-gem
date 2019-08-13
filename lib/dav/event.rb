@@ -29,7 +29,7 @@ module Dav
 					@logs.push(log)
 				end
          else
-            raise_error(JSON.parse(result["body"]))
+            raise_error(result["body"])
          end
 		end
 
@@ -40,7 +40,7 @@ module Dav
          if result["code"] == 200
             event = Event.new(JSON.parse(result["body"]))
          else
-            raise_error(JSON.parse(result["body"]))
+            raise_error(result["body"])
          end
       end
 
@@ -51,7 +51,7 @@ module Dav
          if result["code"] == 200
             event = Event.new(JSON.parse(result["body"]))
          else
-            raise_error(JSON.parse(result["body"]))
+            raise_error(result["body"])
          end
       end
 
@@ -63,7 +63,7 @@ module Dav
             @name = name
             return self
          else
-            raise_error(JSON.parse(result["body"]))
+            raise_error(result["body"])
          end
       end
 
@@ -74,7 +74,7 @@ module Dav
          if result["code"] == 200
             return true
          else
-            raise_error(JSON.parse(result["body"]))
+            raise_error(result["body"])
          end
       end
    end

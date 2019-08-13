@@ -25,7 +25,7 @@ module Dav
 			if result["code"] == 201
 				Session.new(JSON.parse(result["body"]))
 			else
-				raise_error(JSON.parse(result["body"]))
+				raise_error(result["body"])
 			end
 		end
 	end

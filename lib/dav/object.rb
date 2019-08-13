@@ -21,7 +21,7 @@ module Dav
          if result["code"] == 201
             Object.new(JSON.parse(result["body"]))
          else
-            raise_error(JSON.parse result["body"])
+            raise_error(result["body"])
          end
       end
 
@@ -31,7 +31,7 @@ module Dav
          if result["code"] == 201
             Object.new(JSON.parse(result["body"]))
          else
-            raise_error(JSON.parse result["body"])
+            raise_error(result["body"])
          end
       end
       
@@ -53,13 +53,13 @@ module Dav
                   obj.file = result2["body"]
                   return obj
                else
-                  raise_error(JSON.parse(result2["body"]))
+                  raise_error(result2["body"])
                end
             else
                return obj
             end
          else
-            raise_error(JSON.parse(result["body"]))
+            raise_error(result["body"])
          end
       end
       
@@ -71,7 +71,7 @@ module Dav
             # Update local object
             @properties = JSON.parse(result["body"])["properties"]
          else
-            raise_error(JSON.parse result["body"])
+            raise_error(result["body"])
          end
       end
 
@@ -85,7 +85,7 @@ module Dav
             @file = file
             @properties = JSON.parse(result["body"])["properties"]
          else
-            raise_error(JSON.parse result["body"])
+            raise_error(result["body"])
          end
       end
       
@@ -95,7 +95,7 @@ module Dav
          if result["code"] == 200
             JSON.parse(result["body"])
          else
-            raise_error(JSON.parse result["body"])
+            raise_error(result["body"])
          end
       end
 
@@ -105,7 +105,7 @@ module Dav
          if result["code"] == 201
             return JSON.parse(result["body"])["token"]
          else
-            raise_error(JSON.parse result["body"])
+            raise_error(result["body"])
          end
       end
 
@@ -115,7 +115,7 @@ module Dav
          if result["code"] == 200
             return JSON.parse(result["body"])["access_token"]
          else
-            raise_error(JSON.parse result["body"])
+            raise_error(result["body"])
          end
       end
 
@@ -125,7 +125,7 @@ module Dav
          if result["code"] == 200
             return true
          else
-            raise_error(JSON.parse result["body"])
+            raise_error(result["body"])
          end
       end
 
@@ -135,7 +135,7 @@ module Dav
          if result["code"] == 200
             return true
          else
-            raise_error(JSON.parse result["body"])
+            raise_error(result["body"])
          end
       end
    end

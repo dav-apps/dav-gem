@@ -30,7 +30,7 @@ module Dav
             user.jwt = jwt
             user
          else
-            raise_error(JSON.parse result["body"])
+            raise_error(result["body"])
          end
       end
 
@@ -42,7 +42,7 @@ module Dav
             user.jwt = jwt
             user
          else
-            raise_error(JSON.parse result["body"])
+            raise_error(result["body"])
          end
       end
       
@@ -65,7 +65,7 @@ module Dav
             @period_end = body["period_end"] ? DateTime.parse(body["period_end"]) : nil
             @subscription_status = body["subscription_status"]
          else
-            raise_error(JSON.parse result["body"])
+            raise_error(result["body"])
          end
       end
       
@@ -75,7 +75,7 @@ module Dav
          if result["code"] == 200
             JSON.parse(result["body"])
          else
-            raise_error(JSON.parse(result["body"]))
+            raise_error(result["body"])
          end
       end
       
@@ -85,7 +85,7 @@ module Dav
          if result["code"] == 200
             JSON.parse(result["body"])
          else
-            raise_error(JSON.parse(result["body"]))
+            raise_error(result["body"])
          end
       end
 
@@ -95,7 +95,7 @@ module Dav
          if result["code"] == 200
             JSON.parse(result["body"])
          else
-            raise_error(JSON.parse(result["body"]))
+            raise_error(result["body"])
          end
       end
       
@@ -105,7 +105,7 @@ module Dav
          if result["code"] == 200
             JSON.parse(result["body"])
          else
-            raise_error(JSON.parse(result["body"]))
+            raise_error(result["body"])
          end
       end
       
@@ -115,7 +115,7 @@ module Dav
          if result["code"] == 200
             JSON.parse(result["body"])
          else
-            raise_error(JSON.parse(result["body"]))
+            raise_error(result["body"])
          end
       end
       
@@ -125,7 +125,7 @@ module Dav
          if result["code"] == 200
             JSON.parse(result["body"])
          else
-            raise_error(JSON.parse(result["body"]))
+            raise_error(result["body"])
          end
       end
       
@@ -135,7 +135,7 @@ module Dav
          if result["code"] == 200
             @confirmed = true
          else
-            raise_error(JSON.parse(result["body"]))
+            raise_error(result["body"])
          end
       end
       
@@ -145,7 +145,7 @@ module Dav
          if result["code"] == 200
             JSON.parse(result["body"])
          else
-            raise_error(JSON.parse result["body"])
+            raise_error(result["body"])
          end
       end
 
@@ -155,7 +155,7 @@ module Dav
          if result["code"] == 200
             JSON.parse(result["body"])
          else
-            raise_error(JSON.parse result["body"])
+            raise_error(result["body"])
          end
       end
 
@@ -165,7 +165,7 @@ module Dav
          if result["code"] == 200
             JSON.parse(result["body"])
          else
-            raise_error(JSON.parse result["body"])
+            raise_error(result["body"])
          end
       end
       
@@ -175,7 +175,7 @@ module Dav
          if result["code"] == 201
             Dav::Dev.new(JSON.parse(result["body"]))
          else
-            raise_error(JSON.parse(result["body"]))
+            raise_error(result["body"])
          end
       end
 

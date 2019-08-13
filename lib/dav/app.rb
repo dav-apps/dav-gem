@@ -21,7 +21,7 @@ module Dav
          if result["code"] == 201
             app = App.new(JSON.parse result["body"])
          else
-            raise_error(JSON.parse result["body"])
+            raise_error(result["body"])
          end
       end
       
@@ -31,7 +31,7 @@ module Dav
          if result["code"] == 200
             app = App.new(JSON.parse result["body"])
          else
-            raise_error(JSON.parse result["body"])
+            raise_error(result["body"])
          end
       end
 
@@ -41,7 +41,7 @@ module Dav
          if result["code"] == 200
             return convert_json_to_active_users_array(JSON.parse(result["body"])["days"])
          else
-            raise_error(JSON.parse result["body"])
+            raise_error(result["body"])
          end
       end
 
@@ -52,7 +52,7 @@ module Dav
             apps_json = (JSON.parse(result["body"]).to_a)[0][1].to_a
             apps_array = convert_json_to_apps_array(apps_json)
          else
-            raise_error(JSON.parse result["body"])
+            raise_error(result["body"])
          end
       end
       
@@ -67,7 +67,7 @@ module Dav
             @link_play = body["link_play"]
             @link_windows = body["link_windows"]
          else
-            raise_error(JSON.parse result["body"])
+            raise_error(result["body"])
          end
       end
       
@@ -77,7 +77,7 @@ module Dav
          if result["code"] == 200
             JSON.parse(result["body"])
          else
-            raise_error(JSON.parse result["body"])
+            raise_error(result["body"])
          end
       end
       
@@ -87,7 +87,7 @@ module Dav
          if result["code"] == 201
             return Event.new(JSON.parse result["body"])
          else
-            raise_error(JSON.parse(result["body"]))
+            raise_error(result["body"])
          end
       end
    end

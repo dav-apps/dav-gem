@@ -17,7 +17,7 @@ module Dav
          if result["code"] == 201
             Dev.new(JSON.parse(result["body"]))
          else
-            raise_error(JSON.parse(result["body"]))
+            raise_error(result["body"])
          end
       end
       
@@ -27,7 +27,7 @@ module Dav
          if result["code"] == 200
             Dev.new(JSON.parse(result["body"]))
          else
-            raise_error(JSON.parse(result["body"]))
+            raise_error(result["body"])
          end
       end
       
@@ -37,7 +37,7 @@ module Dav
          if result["code"] == 200
             Dev.new(JSON.parse(result["body"]))
          else
-            raise_error(JSON.parse(result["body"]))
+            raise_error(result["body"])
          end
       end
       
@@ -47,7 +47,7 @@ module Dav
          if result["code"] == 200
             JSON.parse(result["body"])
          else
-            raise_error(JSON.parse(result["body"]))
+            raise_error(result["body"])
          end
       end
       
@@ -59,7 +59,7 @@ module Dav
             @secret_key = JSON.parse(result["body"])["secret_key"]
             @uuid = JSON.parse(result["body"])["uuid"]
          else
-            raise_error(JSON.parse(result["body"]))
+            raise_error(result["body"])
          end
       end
    end

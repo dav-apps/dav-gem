@@ -24,7 +24,7 @@ module Dav
 				archive = Archive.new(JSON.parse result["body"])
 				return archive
 			else
-				raise_error(JSON.parse result["body"])
+				raise_error(result["body"])
 			end
 		end
 
@@ -36,7 +36,7 @@ module Dav
 				archive = Archive.new(JSON.parse result["body"])
 				return archive
 			else
-				raise_error(JSON.parse result["body"])
+				raise_error(result["body"])
 			end
 		end
 
@@ -47,7 +47,7 @@ module Dav
 			if result["code"] == 200
             JSON.parse(result["body"])
          else
-            raise_error(JSON.parse result["body"])
+            raise_error(result["body"])
          end
 		end
 	end

@@ -1,10 +1,11 @@
 module Dav
-   $api_url = "http://localhost:3111/v1/"
+	$api_url = "http://localhost:3111/v1/"
+	$api = false
    
    class Auth
       attr_reader :api_key, :secret_key, :uuid
       
-      def initialize(api_key: "", secret_key: "", uuid: "", environment: "development")
+      def initialize(api_key: "", secret_key: "", uuid: "", environment: "development", api: false)
          @api_key = api_key
          @secret_key = secret_key
          @uuid = uuid
@@ -13,7 +14,9 @@ module Dav
             $api_url = ENV["API_BASE_URL"]
 			else
 				$api_url = "http://localhost:3111/v1/"
-         end
+			end
+			
+			$api = api
       end
       
       def login(email, password)
@@ -33,10 +36,10 @@ module Dav
                user.id = user_id
                user
             else
-               raise_error(JSON.parse get_result["body"])
+               raise_error(get_result["body"])
             end
          else
-            raise_error(JSON.parse login_result["body"])
+            raise_error(login_result["body"])
          end
       end
 
@@ -56,10 +59,10 @@ module Dav
 					user.id = user_id
 					user
 				else
-					raise_error(JSON.parse get_result["body"])
+					raise_error(get_result["body"])
 				end
 			else
-				raise_error(JSON.parse login_result["body"])
+				raise_error(login_result["body"])
 			end
       end
       
@@ -73,7 +76,7 @@ module Dav
 				user.jwt = json["jwt"]
 				return user
          else
-            raise_error(JSON.parse(result["body"]))
+            raise_error(result["body"])
          end
 		end
 		
@@ -87,7 +90,7 @@ module Dav
 				user.jwt = json["jwt"]
 				return user
 			else
-				raise_error(JSON.parse(result["body"]))
+				raise_error(result["body"])
 			end
 		end
 
@@ -99,9 +102,14 @@ end
 
 
 def raise_error(json)
+	if $api
+		raise StandardError, json
+	end
+
+	errors = JSON.parse(json)
    error_message = ""
    i = 0
-   json.values[0].each do |key, value|
+   errors.values[0].each do |key, value|
       if i != 0
          error_message += ", "
       end
