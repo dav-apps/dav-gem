@@ -36,7 +36,7 @@ module Dav
       end
       
       def self.get(jwt, object_id, access_token)
-         url = $api_url + "apps/object/#{object_id.to_s}"
+         url = $api_url + "apps/object/#{object_id}"
          url += "?access_token=#{access_token}" if access_token
          result = send_http_request(url, "GET", {"Authorization" => jwt}, nil)
 
@@ -48,6 +48,32 @@ module Dav
                url = $api_url + "apps/object/#{object_id.to_s}?file=true"
                url += "&access_token=#{access_token}" if access_token
                result2 = send_http_request(url, "GET", {"Authorization" => jwt}, nil)
+
+               if result2["code"] == 200
+                  obj.file = result2["body"]
+                  return obj
+               else
+                  raise_error(result2["body"])
+               end
+            else
+               return obj
+            end
+         else
+            raise_error(result["body"])
+         end
+      end
+
+      def self.get_with_auth(auth_token, id)
+         url = $api_url + "apps/object/#{id}/auth"
+         result = send_http_request(url, "GET", {'Authorization' => auth_token}, nil)
+
+         if result["code"] == 200
+            obj = Object.new(JSON.parse(result["body"]))
+
+            if obj.is_file
+               # Get the file
+               url = $api_url + "apps/object/#{id}/auth?file=true"
+               result2 = send_http_request(url, "GET", {'Authorization' => auth_token}, nil)
 
                if result2["code"] == 200
                   obj.file = result2["body"]
