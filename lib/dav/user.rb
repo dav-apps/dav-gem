@@ -149,9 +149,9 @@ module Dav
          end
       end
 
-      def self.send_delete_account_email(email)
-         url = $api_url + "auth/send_delete_account_email?email=#{email}"
-         result = send_http_request(url, "POST", nil, nil)
+      def send_delete_account_email
+         url = $api_url + "auth/send_delete_account_email"
+         result = send_http_request(url, "POST", {'Authorization' => @jwt}, nil)
          if result["code"] == 200
             JSON.parse(result["body"])
          else
