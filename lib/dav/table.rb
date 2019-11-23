@@ -1,6 +1,6 @@
 module Dav
    class Table
-      attr_reader :id, :app_id, :name
+      attr_reader :id, :app_id, :name, :table_objects
       
       def initialize(attributes)
          @id = attributes["id"]
