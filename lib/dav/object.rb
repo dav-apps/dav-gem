@@ -23,7 +23,18 @@ module Dav
          else
             raise_error(result["body"])
          end
-      end
+		end
+		
+		def self.create_with_table_id(jwt, table_id, app_id, properties, visibility)
+			url = $api_url + "apps/object?table_id=#{table_id}&app_id=#{app_id}"
+			url += "&visibility=#{visibility}" if visibility
+			result = send_http_request(url, "POST", {"Authorization" => jwt, "Content-Type" => "application/json"}, properties)
+			if result["code"] == 201
+				Object.new(JSON.parse(result["body"]))
+			else
+				raise_error(result["body"])
+			end
+		end
 
       def self.create_file(jwt, table_name, app_id, file, content_type, ext)
          url = $api_url + "apps/object?table_name=#{table_name}&app_id=#{app_id}&ext=#{ext}"
